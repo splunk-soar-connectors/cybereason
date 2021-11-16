@@ -5,20 +5,20 @@
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
-# Phantom App imports
+import json
+import traceback
+
 import phantom.app as phantom
-from phantom.base_connector import BaseConnector
+import requests
+from bs4 import BeautifulSoup
 from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 # Usage of the consts file is recommended
 from cybereason_consts import *
-import requests
-import json
-import traceback
-from cybereason_session import CybereasonSession
 from cybereason_poller import CybereasonPoller
 from cybereason_query_actions import CybereasonQueryActions
-from bs4 import BeautifulSoup
+from cybereason_session import CybereasonSession
 
 
 class RetVal(tuple):
@@ -73,7 +73,8 @@ class CybereasonConnector(BaseConnector):
             return self._process_html_response(r, action_result)
 
         # everything else is actually an error at this point
-        message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(r.status_code, r.text.replace('{', '{{').replace('}', '}}'))
+        message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
+            r.status_code, r.text.replace('{', '{{').replace('}', '}}'))
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -134,9 +135,15 @@ class CybereasonConnector(BaseConnector):
         if cookies.get("JSESSIONID"):
             # We have a session id cookie, so the authentication succeeded
             self.save_progress('Successfully connected to the Cybereason console and verified session cookie')
-            return action_result.set_status(phantom.APP_SUCCESS, 'Successfully connected to the Cybereason console and verified session cookie')
+            return action_result.set_status(
+                phantom.APP_SUCCESS,
+                'Successfully connected to the Cybereason console and verified session cookie'
+            )
         else:
-            return action_result.set_status(phantom.APP_ERROR, 'Connectivity failed. Unable to get session cookie from Cybereason console')
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                'Connectivity failed. Unable to get session cookie from Cybereason console'
+            )
 
     def _get_delete_registry_key_body(self, cr_session, malop_id, machine_name, action_result):
         query = {
@@ -176,7 +183,12 @@ class CybereasonConnector(BaseConnector):
         for _, process_data in results["data"]["resultIdToElementDataMap"].items():
             if process_data["elementValues"].get("hasAutorunEvidence"):
                 target_id = process_data["elementValues"]["hasAutorunEvidence"]["elementValues"][0]["guid"]
-                matching_machines = list(filter(lambda machine: machine["name"].lower() == machine_name, process_data["elementValues"]["ownerMachine"]["elementValues"]))
+                matching_machines = list(
+                    filter(
+                        lambda machine: machine["name"].lower(
+                        ) == machine_name, process_data["elementValues"]["ownerMachine"]["elementValues"]
+                    )
+                )
                 if len(matching_machines) > 0:
                     machine_id = matching_machines[0]["guid"]
                     if not remediate_body["actionsByMachine"].get(machine_id):
@@ -341,7 +353,10 @@ class CybereasonConnector(BaseConnector):
         cybereason_status = PHANTOM_TO_CYBEREASON_STATUS.get(phantom_status)
         if not cybereason_status:
             self.save_progress("Invalid status selected")
-            return action_result.set_status(phantom.APP_ERROR, "Invalid status. Please provide a valid value in the 'status' action parameter")
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Invalid status. Please provide a valid value in the 'status' action parameter"
+            )
 
         try:
             cr_session = CybereasonSession(self).get_session()
@@ -596,7 +611,10 @@ class CybereasonConnector(BaseConnector):
         reputation_item = self._get_string_param(param.get('reputation_item_hash'))
         custom_reputation = param.get('custom_reputation')
         if custom_reputation not in CUSTOM_REPUTATION_LIST:
-            return action_result.set_status(phantom.APP_ERROR, "Please provide a valid value for the 'custom_reputation' action parameter")
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Please provide a valid value for the 'custom_reputation' action parameter"
+            )
 
         try:
             cr_session = CybereasonSession(self).get_session()
@@ -606,7 +624,9 @@ class CybereasonConnector(BaseConnector):
             if custom_reputation == 'remove':
                 reputation = json.dumps([{"keys": [reputation_item], "maliciousType": None, "prevent": False, "remove": True}])
             else:
-                reputation = json.dumps([{"keys": [reputation_item], "maliciousType": custom_reputation, "prevent": False, "remove": False}])
+                reputation = json.dumps(
+                    [{"keys": [reputation_item], "maliciousType": custom_reputation, "prevent": False, "remove": False}]
+                )
 
             res = cr_session.post(url, data=reputation, headers=self._headers)
             if res.status_code < 200 or res.status_code >= 399:
@@ -813,7 +833,10 @@ class CybereasonConnector(BaseConnector):
             })
             res = cr_session.post(url, data=query, headers=self._headers)
             if res.status_code == 204:
-                return action_result.set_status(phantom.APP_ERROR, "Status Code:204. The sensor names are incorrect or the filters are not valid")
+                return action_result.set_status(
+                    phantom.APP_ERROR,
+                    "Status Code:204. The sensor names are incorrect or the filters are not valid"
+                )
             if res.status_code < 200 or res.status_code >= 399:
                 self._process_response(res, action_result)
                 return action_result.get_status()
@@ -866,7 +889,10 @@ class CybereasonConnector(BaseConnector):
 
             res = cr_session.post(url, data=query, headers=self._headers)
             if res.status_code == 204:
-                return action_result.set_status(phantom.APP_ERROR, "Status Code:204. The sensor names are incorrect or the filters are not valid")
+                return action_result.set_status(
+                    phantom.APP_ERROR,
+                    "Status Code:204. The sensor names are incorrect or the filters are not valid"
+                )
             if res.status_code < 200 or res.status_code >= 399:
                 self._process_response(res, action_result)
                 return action_result.get_status()
@@ -1030,8 +1056,9 @@ class CybereasonConnector(BaseConnector):
 
 
 def main():
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 

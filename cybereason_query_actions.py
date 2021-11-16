@@ -8,6 +8,7 @@ import traceback
 # Phantom App imports
 import phantom.app as phantom
 from phantom.action_result import ActionResult
+
 from cybereason_session import CybereasonSession
 
 
@@ -324,10 +325,14 @@ class CybereasonQueryActions:
                 data = {
                     "element_name": domain_data["simpleValues"]["elementDisplayName"]["values"][0]
                 }
-                self._add_simple_value_if_exists(data, "malicious_classification_type", domain_data, "maliciousClassificationType")
+                self._add_simple_value_if_exists(
+                    data, "malicious_classification_type", domain_data, "maliciousClassificationType"
+                )
                 self._add_simple_value_if_exists(data, "is_internal_domain", domain_data, "isInternalDomain")
                 self._add_simple_value_if_exists(data, "was_ever_resolved", domain_data, "everResolvedDomain")
-                self._add_simple_value_if_exists(data, "was_ever_resolved_as_second_level_domain", domain_data, "everResolvedSecondLevelDomain")
+                self._add_simple_value_if_exists(
+                    data, "was_ever_resolved_as_second_level_domain", domain_data, "everResolvedSecondLevelDomain"
+                )
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})

@@ -4,17 +4,16 @@
 
 
 import datetime
-import requests
 import hashlib
-import traceback
 import json
+import traceback
 
-# Phantom App imports
 import phantom.app as phantom
+import requests
 from phantom.action_result import ActionResult
 
-from cybereason_session import CybereasonSession
 from cybereason_consts import *
+from cybereason_session import CybereasonSession
 
 
 class CybereasonPoller:
@@ -32,18 +31,28 @@ class CybereasonPoller:
             current_time = datetime.datetime.now()
             is_first_poll = state.get("is_first_poll", True)
 
-            ret_val, malop_historical_days = connector._validate_integer(action_result, config["malop_historical_days"], MALOP_HISTORICAL_DAYS_KEY)
+            ret_val, malop_historical_days = connector._validate_integer(
+                action_result, config["malop_historical_days"],
+                MALOP_HISTORICAL_DAYS_KEY
+            )
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
 
-            ret_val, malware_historical_days = connector._validate_integer(action_result, config["malware_historical_days"], MALWARE_HISTORICAL_DAYS_KEY)
+            ret_val, malware_historical_days = connector._validate_integer(
+                action_result, config["malware_historical_days"],
+                MALWARE_HISTORICAL_DAYS_KEY
+            )
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
 
             if is_first_poll:
-                connector.save_progress("This is a first time poll. We will poll for malops from the last {days} days", days=malop_historical_days)
+                connector.save_progress(
+                    "This is a first time poll. We will poll for malops from the last {days} days", days=malop_historical_days
+                )
                 malop_start_time = current_time + datetime.timedelta(days=-malop_historical_days)
-                connector.save_progress("This is a first time poll. We will poll for malware from the last {days} days", days=malware_historical_days)
+                connector.save_progress(
+                    "This is a first time poll. We will poll for malware from the last {days} days", days=malware_historical_days
+                )
                 malware_millisec_since_last_poll = malware_historical_days * 60 * 60 * 24 * 1000
                 state["is_first_poll"] = False
             else:
@@ -51,7 +60,9 @@ class CybereasonPoller:
                 malop_start_time = last_poll_timestamp
                 malware_millisec_since_last_poll = round((current_time - last_poll_timestamp).total_seconds() * 1000)
             state["last_poll_timestamp"] = current_time.timestamp()
-            connector.save_progress("Getting malops between {start_time} and {current_time}", start_time=malop_start_time, current_time=current_time)
+            connector.save_progress(
+                "Getting malops between {start_time} and {current_time}", start_time=malop_start_time, current_time=current_time
+            )
             connector.save_progress("Getting malware for the last {msec} milliseconds", msec=malware_millisec_since_last_poll)
 
             # Initialize the session that will be used throughout the poller
@@ -59,8 +70,10 @@ class CybereasonPoller:
             malop_start_time_microsec_timestamp = round(malop_start_time.timestamp() * 1000)
             # When called as a scheduled poll, max_container count comes as 4294967295 which causes a Cybereason API error.
             container_count = min(int(param.get(phantom.APP_JSON_CONTAINER_COUNT)), 5000)
-            success = success & self._fetch_and_ingest_malops(connector, config, malop_start_time_microsec_timestamp, container_count)
-            success = success & self._fetch_and_ingest_malwares(connector, config, malware_millisec_since_last_poll, container_count)
+            success = success & self._fetch_and_ingest_malops(connector, config,
+                    malop_start_time_microsec_timestamp, container_count)
+            success = success & self._fetch_and_ingest_malwares(connector, config,
+                    malware_millisec_since_last_poll, container_count)
         except Exception as e:
             success = False
             err = connector._get_error_message_from_exception(e)
@@ -74,7 +87,10 @@ class CybereasonPoller:
             connector.save_progress("Successfully completed polling for Malop and Malware events")
             return action_result.set_status(phantom.APP_SUCCESS, "Malop and Malware ingestion completed successfully")
         else:
-            return action_result.set_status(phantom.APP_ERROR, "Error when polling for Malop and Malware. Please refer the logs for more details")
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                "Error when polling for Malop and Malware. Please refer the logs for more details"
+            )
 
     def _fetch_and_ingest_malops(self, connector, config, start_time_microsec_timestamp, container_count):
         # Fetch Malops
@@ -102,7 +118,9 @@ class CybereasonPoller:
         # Fetch Malwares
         success = True
         malwares_array = self._get_malware(connector, malware_millisec_since_last_poll, container_count)
-        connector.save_progress("Fetched {number_of_malwares} malwares from Cybereason console", number_of_malwares=len(malwares_array))
+        connector.save_progress(
+            "Fetched {number_of_malwares} malwares from Cybereason console", number_of_malwares=len(malwares_array)
+        )
 
         # Ingest malware
         connector.save_progress("Ingesting malware...")
@@ -342,7 +360,10 @@ class CybereasonPoller:
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
     def _does_container_exist_for_malop_malware(self, connector, malop_id):
-        url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(connector.get_phantom_base_url(), malop_id, connector.get_asset_id())
+        url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(
+            connector.get_phantom_base_url(),
+            malop_id, connector.get_asset_id()
+        )
 
         try:
             r = requests.get(url, verify=False)
@@ -413,7 +434,12 @@ class CybereasonPoller:
             return None
 
         if resp_json.get('count', 0) <= 0:
-            connector.debug_print("No artifact matched the source_data_identifier {0} and container id {1}".format(source_data_identifier, container_id))
+            connector.debug_print(
+                "No artifact matched the source_data_identifier {0} and container id {1}".format(
+                    source_data_identifier,
+                    container_id
+                )
+            )
             return None
 
         try:
@@ -464,7 +490,9 @@ class CybereasonPoller:
         container_json["status"] = status_map.get(malop_data["simpleValues"]["managementStatus"]["values"][0], "New")
         severity_map = self._get_severity_map_malop(connector, config)
         (_, decision_feature_key) = self._get_decision_feature_details(decision_feature)
-        container_json["start_time"] = self._phtimestamp_from_crtimestamp(malop_data["simpleValues"]["malopStartTime"]["values"][0])
+        container_json["start_time"] = self._phtimestamp_from_crtimestamp(
+            malop_data["simpleValues"]["malopStartTime"]["values"][0]
+        )
         container_json["severity"] = severity_map.get(decision_feature_key, "High")
         container_json["artifacts"] = self._get_artifacts_for_malop(connector, malop_id, malop_data)
 
@@ -590,7 +618,9 @@ class CybereasonPoller:
             self._add_simple_value_if_exists(cef, "receivedBytesCount", connection_details, "receivedBytesCount")
             self._add_simple_value_if_exists(cef, "transmittedBytesCount", connection_details, "transmittedBytesCount")
             self._add_simple_value_if_exists(cef, "remoteAddressCountryName", connection_details, "remoteAddressCountryName")
-            self._add_simple_value_if_exists(cef, "connectionType", connection_details, "isExternalConnection", connection_type_map)
+            self._add_simple_value_if_exists(
+                cef, "connectionType", connection_details, "isExternalConnection", connection_type_map
+            )
             self._add_simple_value_if_exists(cef, "direction", connection_details, "isIncoming", connection_direction_map)
             self._add_simple_value_if_exists(cef, "connectionStatus", connection_details, "isLiveProcess", connection_process_map)
 
@@ -738,7 +768,9 @@ class CybereasonPoller:
 
         # Build the container JSON
         container_json = {}
-        container_json["name"] = "{0}: {1}".format(self._get_malware_type_map().get(malware["type"], malware["type"]), malware["name"])
+        container_json["name"] = "{0}: {1}".format(self._get_malware_type_map().get(
+            malware["type"], malware["type"]), malware["name"]
+        )
         container_json["data"] = malware
         container_json["description"] = malware["name"]
         container_json["source_data_identifier"] = malware["guid"]
@@ -847,7 +879,8 @@ class CybereasonPoller:
             "fileHashMD5": ["hash"]
         }
 
-    # Converts timestamps from Cybereason API (e.g. string "1585270873770") to Phantom/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
+    # Converts timestamps from Cybereason API
+    # (e.g. string "1585270873770") to Phantom/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
     def _phtimestamp_from_crtimestamp(self, cybereason_timestamp):
         timestamp = datetime.datetime.fromtimestamp(int(cybereason_timestamp) / 1000.0)  # Timestamp is in epoch-milliseconds
         return timestamp.isoformat()[:-3] + "Z"  # Remove the microsecond accuracy, add "Z" for UTC timezone

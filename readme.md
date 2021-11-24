@@ -23,8 +23,10 @@ Cybereason will create:
 
 ## Playbook Backward Compatibility
 
--   The new version of this application is a complete rewrite and is not backward compatible. Hence,
-    it is requested to the end-user to please update their existing playbooks by re-inserting \|
-    modifying \| deleting the corresponding action blocks to ensure the correct functioning of the
-    playbooks created on the earlier versions of the app. If the end-user does not want to upgrade
-    their playbooks, they can remain on or downgrade to the old version(v1.0.7).
+-   The below-mentioned actions have been added. Hence, it is requested to the end-user to please update their
+    existing playbooks by inserting | modifying | deleting the corresponding action blocks for this action on the earlier versions of the app.
+	-   isolate specific machine
+	-   unisolate specific machine
+	-   upgrade sensor
+	-   restart sensor
+	-   query machine ip

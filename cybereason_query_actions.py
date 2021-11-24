@@ -98,7 +98,9 @@ class CybereasonQueryActions:
 
         name = connector._get_string_param(param.get('name'))
         try:
-            self._query_machine_details(connector, action_result, name)
+            ret_val = self._query_machine_details(connector, action_result, name)
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
 
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -114,14 +116,16 @@ class CybereasonQueryActions:
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        machine_ip = connector._get_string_param(param.get('machine_ip'))
+        machine_ip = connector._get_string_param(param['machine_ip'])
 
         ret_val, machine_names = connector._get_machine_name_by_machine_ip(machine_ip, action_result)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
         try:
-            self._query_machine_details(connector, action_result, machine_names[0])
+            ret_val = self._query_machine_details(connector, action_result, machine_names[0])
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
 
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -508,6 +512,8 @@ class CybereasonQueryActions:
 
             summary = action_result.update_summary({})
             summary['total_machines'] = len(malops_dict)
+
+            return phantom.APP_SUCCESS
 
         except Exception as e:
             err = connector._get_error_message_from_exception(e)

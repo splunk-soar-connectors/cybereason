@@ -24,7 +24,6 @@ CUSTOM_REPUTATION_LIST = ["whitelist", "blacklist", "remove"]
 # Constants relating to '_get_error_message_from_exception'
 ERR_CODE_MSG = "Error code unavailable"
 ERR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
-PARSE_ERR_MSG = "Unable to parse the error message. Please check the asset configuration and|or action parameters"
 
 # Constants relating to '_validate_integer'
 INVALID_INTEGER_ERR_MSG = "Please provide a valid integer value in the {}"

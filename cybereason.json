@@ -119,7 +119,7 @@
         },
         {
             "action": "delete registry key",
-            "description": "Deletes the specified registry key for a given malop id and machine name",
+            "description": "Deletes the specified registry key for a given malop ID and machine name",
             "verbose": "A malop can contain processes that write to Windows registry keys. This action will fire a remediation action on the Cybereason console that will delete the registry key using the Cybereason sensor installed on the machine.",
             "type": "correct",
             "identifier": "delete_registry_key",
@@ -940,7 +940,7 @@
                     "order": 0
                 },
                 "remediation_user": {
-                    "description": "The user id that has requested the remediation action",
+                    "description": "The user ID that has requested the remediation action",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1324,7 +1324,7 @@
         },
         {
             "action": "query machine ip",
-            "description": "Queries a given machine ip to retrieve all that machine's information",
+            "description": "Queries a given machine IP to retrieve all that machine's information",
             "type": "investigate",
             "identifier": "query_machine_ip",
             "read_only": true,
@@ -1861,13 +1861,13 @@
         {
             "action": "upgrade sensor",
             "description": "Upgrade a sensor",
-            "verbose": "Upgrade a sensor using the Cybereason sensor pylum id provided as an input.",
+            "verbose": "Upgrade a sensor using the Cybereason sensor pylum ID provided as an input.",
             "type": "generic",
             "identifier": "upgrade_sensor",
             "read_only": false,
             "parameters": {
                 "pylumid": {
-                    "description": "The Cybereason sensor pylum ID targeted for upgrade. Comma-separated list is allowed",
+                    "description": "The Cybereason sensor pylum ID targeted for upgrade (comma-separated IDs allowed)",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1884,7 +1884,7 @@
                     "contains": [
                         "cybereason sensor pylum id"
                     ],
-                    "column_name": "Pylumid",
+                    "column_name": "Pylum ID",
                     "column_order": 0
                 },
                 {
@@ -1938,13 +1938,13 @@
         {
             "action": "restart sensor",
             "description": "Restart a sensor",
-            "verbose": "Restart a sensor using the Cybereason sensor pylum id provided as an input.",
+            "verbose": "Restart a sensor using the Cybereason sensor pylum ID provided as an input.",
             "type": "generic",
             "identifier": "restart_sensor",
             "read_only": false,
             "parameters": {
                 "pylumid": {
-                    "description": "The Cybereason sensor pylum id targeted for restart. Comma-separated list is allowed",
+                    "description": "The Cybereason sensor pylum ID targeted for restart (comma-separated IDs allowed)",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1961,7 +1961,7 @@
                     "contains": [
                         "cybereason sensor pylum id"
                     ],
-                    "column_name": "Pylumid",
+                    "column_name": "Pylum ID",
                     "column_order": 0
                 },
                 {

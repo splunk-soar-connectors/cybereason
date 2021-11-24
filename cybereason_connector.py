@@ -99,31 +99,19 @@ class CybereasonConnector(BaseConnector):
         :return: error message
         """
 
+        error_code = ERR_CODE_MSG
+        error_msg = ERR_MSG_UNAVAILABLE
         try:
             if e.args:
                 if len(e.args) > 1:
                     error_code = e.args[0]
                     error_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_code = ERR_CODE_MSG
                     error_msg = e.args[0]
-            else:
-                error_code = ERR_CODE_MSG
-                error_msg = ERR_MSG_UNAVAILABLE
         except:
-            error_code = ERR_CODE_MSG
-            error_msg = ERR_MSG_UNAVAILABLE
+            pass
 
-        try:
-            if error_code in ERR_CODE_MSG:
-                error_text = "Error Message: {0}".format(error_msg)
-            else:
-                error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
-        except:
-            self.debug_print(PARSE_ERR_MSG)
-            error_text = PARSE_ERR_MSG
-
-        return error_text
+        return "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
 
     def _validate_integer(self, action_result, parameter, key):
         if parameter is not None:
@@ -353,7 +341,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Add malop comment action executed successfully")
 
     def _handle_update_malop_status(self, param):
         self.save_progress("In _handle_update_malop_status function")
@@ -389,7 +377,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Update malop status action executed successfully")
 
     def _handle_isolate_machine(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -653,7 +641,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Set reputation action executed successfully")
 
     def _get_malop_sensor_ids(self, malop_id, action_result):
         sensor_ids = []
@@ -866,7 +854,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully requested an upgrade sensor action")
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully requested for sensor upgrade")
 
     def _handle_restart_sensor(self, param):
         self.save_progress("In _handle_restart_sensor function")
@@ -922,7 +910,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully requested a sensor restart action")
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully requested for sensor restart")
 
     def _get_machine_name_by_machine_ip(self, machine_ip, action_result):
         machine_names = []

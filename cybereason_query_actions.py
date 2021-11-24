@@ -106,7 +106,7 @@ class CybereasonQueryActions:
             connector.debug_print(traceback.format_exc())
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, status_message="Query machine action successfully completed")
 
     def _handle_query_machine_ip(self, connector, param):
         connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))

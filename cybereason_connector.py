@@ -29,6 +29,11 @@ from cybereason_poller import CybereasonPoller
 from cybereason_query_actions import CybereasonQueryActions
 from cybereason_session import CybereasonSession
 
+try:
+    from urllib import unquote
+except:
+    from urllib.parse import unquote
+
 
 class RetVal(tuple):
 
@@ -71,6 +76,7 @@ class CybereasonConnector(BaseConnector):
             error_text = "Cannot parse error details"
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code, error_text)
+        message = unquote(message)
 
         message = message.replace('{', '{{').replace('}', '}}')
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
@@ -860,7 +866,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully Requested Upgrade")
+        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully requested an upgrade sensor action")
 
     def _handle_restart_sensor(self, param):
         self.save_progress("In _handle_restart_sensor function")
@@ -916,7 +922,7 @@ class CybereasonConnector(BaseConnector):
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
-        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully Requested a Sensor Restart")
+        return action_result.set_status(phantom.APP_SUCCESS, status_message="Successfully requested a sensor restart action")
 
     def _get_machine_name_by_machine_ip(self, machine_ip, action_result):
         machine_names = []

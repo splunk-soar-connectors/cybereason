@@ -641,7 +641,7 @@
         },
         {
             "action": "isolate specific machine",
-            "description": "Blocks all communication to and from the machine identified by the give Name or IP. Communication with the Cybereason platform is not affected",
+            "description": "Blocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected",
             "type": "contain",
             "identifier": "isolate_specific_machine",
             "read_only": false,
@@ -712,8 +712,8 @@
         },
         {
             "action": "unisolate specific machine",
-            "description": "Unblocks all communication to and from the machine identified by the give Name or IP. Communication with the Cybereason platform is not affected",
-            "type": "contain",
+            "description": "Unblocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected",
+            "type": "correct",
             "identifier": "unisolate_specific_machine",
             "read_only": false,
             "undo": "isolate specific machine",
@@ -1867,7 +1867,7 @@
             "read_only": false,
             "parameters": {
                 "pylumid": {
-                    "description": "The Cybereason sensor pylum ID targeted for upgrade",
+                    "description": "The Cybereason sensor pylum ID targeted for upgrade. Comma-separated list is allowed",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -1944,7 +1944,7 @@
             "read_only": false,
             "parameters": {
                 "pylumid": {
-                    "description": "The Cybereason sensor pylum id targeted for restart",
+                    "description": "The Cybereason sensor pylum id targeted for restart. Comma-separated list is allowed",
                     "data_type": "string",
                     "required": true,
                     "primary": true,

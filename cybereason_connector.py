@@ -310,7 +310,6 @@ class CybereasonConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_add_malop_comment(self, param):
-        self.save_progress("In _handle_add_malop_comment function")
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -327,7 +326,7 @@ class CybereasonConnector(BaseConnector):
 
             endpoint_url = "/rest/crimes/comment/"
             url = "{0}{1}{2}".format(self._base_url, endpoint_url, str(malop_id))
-            self.save_progress(url)
+            self.save_progress("Add malop comment URL: {}".format(url))
 
             res = cr_session.post(url, data=comment.encode('utf-8'), headers=self._headers)
 
@@ -344,7 +343,6 @@ class CybereasonConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Add malop comment action executed successfully")
 
     def _handle_update_malop_status(self, param):
-        self.save_progress("In _handle_update_malop_status function")
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -365,7 +363,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/crimes/status".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Update malop status URL: {}".format(url))
             query = json.dumps({malop_id: cybereason_status})
             res = cr_session.post(url, data=query, headers=self._headers)
 
@@ -394,7 +392,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/monitor/global/commands/isolate".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Isolate machine URL: {}".format(url))
             query = json.dumps({"pylumIds": sensor_ids, "malopId": malop_id})
 
             res = cr_session.post(url, data=query, headers=self._headers)
@@ -424,7 +422,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/monitor/global/commands/un-isolate".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Unisolate machine URL: {}".format(url))
             query = json.dumps({"pylumIds": sensor_ids, "malopId": malop_id})
 
             res = cr_session.post(url, data=query, headers=self._headers)
@@ -463,7 +461,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/monitor/global/commands/isolate".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Isolate specific machine URL: {}".format(url))
             query = json.dumps({"pylumIds": sensor_ids})
 
             res = cr_session.post(url, data=query, headers=self._headers)
@@ -504,7 +502,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/monitor/global/commands/un-isolate".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Unisolate specific machine URL: {}".format(url))
             query = json.dumps({"pylumIds": sensor_ids})
 
             res = cr_session.post(url, data=query, headers=self._headers)
@@ -605,7 +603,6 @@ class CybereasonConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_set_reputation(self, param):
-        self.save_progress("In _handle_set_reputation function")
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -623,7 +620,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/classification/update".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Set reputation URL: {}".format(url))
             if custom_reputation == 'remove':
                 reputation = json.dumps([{"keys": [reputation_item], "maliciousType": None, "prevent": False, "remove": True}])
             else:
@@ -649,7 +646,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/visualsearch/query/simple".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Get malop sensor IDs URL: {}".format(url))
             query_path = {
                 "queryPath": [
                     {
@@ -732,7 +729,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/sensors/query".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Sensors query URL: {}".format(url))
             query_path = {
                 "limit": 1000,
                 "offset": 0,
@@ -769,7 +766,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/sensors/query".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Sensors query URL: {}".format(url))
             query_path = {
                 "limit": 1000,
                 "offset": 0,
@@ -802,7 +799,6 @@ class CybereasonConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), sensor_ids)
 
     def _handle_upgrade_sensor(self, param):
-        self.save_progress("In _handle_upgrade_sensor function")
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -816,7 +812,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/sensors/action/upgrade".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Upgrade sensor URL: {}".format(url))
             pylum_ids = []
             # Look for the multiple sensor ids
             if "," in pylum_id:
@@ -857,7 +853,6 @@ class CybereasonConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully requested for sensor upgrade")
 
     def _handle_restart_sensor(self, param):
-        self.save_progress("In _handle_restart_sensor function")
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
@@ -871,7 +866,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/sensors/action/restart".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Restart sensor URL: {}".format(url))
 
             pylum_ids = []
             if "," in pylum_id:
@@ -918,7 +913,7 @@ class CybereasonConnector(BaseConnector):
             cr_session = CybereasonSession(self).get_session()
 
             url = "{0}/rest/sensors/query".format(self._base_url)
-            self.save_progress(url)
+            self.save_progress("Sensors query URL: {}".format(url))
             query_path = {
                 "limit": 1000,
                 "offset": 0,

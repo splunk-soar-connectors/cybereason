@@ -1817,7 +1817,7 @@
                 {
                     "data_path": "action_result.data.*.dns_query",
                     "data_type": "string",
-                    "column_name": "Dns Query",
+                    "column_name": "DNS Query",
                     "column_order": 10
                 },
                 {

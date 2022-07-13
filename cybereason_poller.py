@@ -330,7 +330,7 @@ class CybereasonPoller:
     def _ingest_malop(self, connector, config, malop_id, malop_data):
         success = phantom.APP_ERROR
         container = self._get_container_dict_for_malop(connector, config, malop_id, malop_data)
-        existing_container_id = self._does_container_exist_for_malop_malware(connector, malop_id)
+        existing_container_id = self._does_container_exist_for_malop(connector, malop_id)
         if not existing_container_id:
             # Container does not exist. Go ahead and save it
             connector.debug_print("Saving container for Malop with id {0}".format(malop_id))
@@ -341,7 +341,7 @@ class CybereasonPoller:
 
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
-    def _does_container_exist_for_malop_malware(self, connector, malop_id):
+    def _does_container_exist_for_malop(self, connector, malop_id):
         url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(connector.get_phantom_base_url(), malop_id, connector.get_asset_id())
 
         try:
@@ -723,7 +723,7 @@ class CybereasonPoller:
     def _ingest_malware(self, connector, config, malware):
         success = phantom.APP_ERROR
         container = self._get_container_dict_for_malware(connector, config, malware)
-        existing_container_id = self._does_container_exist_for_malop_malware(connector, malware["guid"])
+        existing_container_id = self._does_container_exist_for_malware(connector, "{}_{}".format(malware["guid"], malware["timestamp"]))
         if not existing_container_id:
             # Container does not exist. Go ahead and save it
             connector.debug_print("Saving container for Malware with id {}".format(malware["guid"]))
@@ -733,6 +733,31 @@ class CybereasonPoller:
             success = self._update_container_for_malop_malware(connector, config, existing_container_id, container)
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
+    def _does_container_exist_for_malware(self, connector, source_data_identifier):
+        url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(connector.get_phantom_base_url(), source_data_identifier, connector.get_asset_id())
+        existing_container_id = False
+
+        try:
+            r = requests.get(url, verify=False)
+            resp_json = r.json()
+        except Exception as e:
+            err = connector._get_error_message_from_exception(e)
+            connector.debug_print("Unable to query Cybereason Malop container: {0}".format(err))
+            return False
+
+        if resp_json.get("count", 0) <= 0:
+            connector.debug_print("No container matched, creating a new one.")
+            return False
+
+        try:
+            existing_container_id = resp_json.get('data',[])[0]['id']
+        except Exception as e:
+            err = connector._get_error_message_from_exception(e)
+            connector.debug_print("Container results are not proper: {0}".format(err))
+            return False
+
+        return existing_container_id
+
     def _get_container_dict_for_malware(self, connector, config, malware):
         connector.debug_print("Building container for malware {0}".format(malware["guid"]))
 
@@ -741,7 +766,7 @@ class CybereasonPoller:
         container_json["name"] = "{0}: {1}".format(self._get_malware_type_map().get(malware["type"], malware["type"]), malware["name"])
         container_json["data"] = malware
         container_json["description"] = malware["name"]
-        container_json["source_data_identifier"] = malware["guid"]
+        container_json["source_data_identifier"] = "{}_{}".format(malware["guid"], malware["timestamp"])
         container_json["label"] = config.get("ingest", {}).get("container_label")
         status_map = self._get_status_map_malware()
         container_json["status"] = status_map.get(malware["status"], "New")

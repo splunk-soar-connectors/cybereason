@@ -342,28 +342,7 @@ class CybereasonPoller:
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
     def _does_container_exist_for_malop(self, connector, malop_id):
-        url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(connector.get_phantom_base_url(), malop_id, connector.get_asset_id())
-
-        try:
-            r = requests.get(url, verify=False)
-            resp_json = r.json()
-        except Exception as e:
-            err = connector._get_error_message_from_exception(e)
-            connector.debug_print("Unable to query Cybereason Malop container: {0}".format(err))
-            return False
-
-        if resp_json.get("count", 0) <= 0:
-            connector.debug_print("No container matched, creating a new one.")
-            return False
-
-        try:
-            existing_container_id = resp_json.get('data', [])[0]['id']
-        except Exception as e:
-            err = connector._get_error_message_from_exception(e)
-            connector.debug_print("Container results are not proper: {0}".format(err))
-            return False
-
-        return existing_container_id
+        return self._does_container_exist_for_malop_malware(connector, malop_id)
 
     def _update_container_for_malop_malware(self, connector, config, existing_container_id, container):
         # First, update the container without updating any artifacts
@@ -734,6 +713,9 @@ class CybereasonPoller:
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
     def _does_container_exist_for_malware(self, connector, source_data_identifier):
+        return self._does_container_exist_for_malop_malware(connector, source_data_identifier)
+
+    def _does_container_exist_for_malop_malware(self, connector, source_data_identifier):
         url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(connector.get_phantom_base_url(), source_data_identifier, connector.get_asset_id())
         existing_container_id = False
 

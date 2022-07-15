@@ -143,6 +143,7 @@ class CybereasonConnector(BaseConnector):
                 'Successfully connected to the Cybereason console and verified session cookie'
             )
         else:
+            self.debug_print('Failure to verify session cookie.')
             return action_result.set_status(
                 phantom.APP_ERROR,
                 'Connectivity failed. Unable to get session cookie from Cybereason console'
@@ -235,6 +236,7 @@ class CybereasonConnector(BaseConnector):
             })
         except Exception as e:
             err = self._get_error_message_from_exception(e)
+            self.debug_print("Error occured: {}".format(err))
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
         return action_result.set_status(phantom.APP_SUCCESS)

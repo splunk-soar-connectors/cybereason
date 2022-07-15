@@ -771,7 +771,7 @@ class CybereasonPoller:
             return False
 
         try:
-            existing_container_id = resp_json.get('data',[])[0]['id']
+            existing_container_id = resp_json.get('data', [])[0]['id']
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print("Container results are not proper: {0}".format(err))

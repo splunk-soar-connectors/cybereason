@@ -948,6 +948,54 @@ class CybereasonConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), machine_names)
 
+    def on_poll(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        poller = CybereasonPoller()
+        return poller.do_poll(self, param)
+
+    def _handle_query_processes(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_processes(self, param)
+
+    def _handle_query_machine(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_machine(self, param)
+
+    def _handle_query_machine_ip(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_machine_ip(self, param)
+
+    def _handle_query_users(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_users(self, param)
+
+    def _handle_query_files(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_files(self, param)
+
+    def _handle_query_domain(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_domain(self, param)
+
+    def _handle_query_connections(self, param):
+        self.save_progress("Entered the function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_connections(self, param)
+
     def handle_action(self, param):
         ret_val = phantom.APP_SUCCESS
 
@@ -966,8 +1014,7 @@ class CybereasonConnector(BaseConnector):
             ret_val = self._handle_get_sensor_status(param)
 
         elif action_id == 'on_poll':
-            poller = CybereasonPoller()
-            ret_val = poller.do_poll(self, param)
+            ret_val = self.on_poll(param)
 
         elif action_id == 'add_malop_comment':
             ret_val = self._handle_add_malop_comment(param)
@@ -1003,32 +1050,25 @@ class CybereasonConnector(BaseConnector):
             ret_val = self._handle_restart_sensor(param)
 
         elif action_id == 'query_processes':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_processes(self, param)
+            ret_val = self._handle_query_processes(param)
 
         elif action_id == 'query_machine':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_machine(self, param)
+            ret_val = self._handle_query_machine(param)
 
         elif action_id == 'query_machine_ip':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_machine_ip(self, param)
+            ret_val = self._handle_query_machine_ip(param)
 
         elif action_id == 'query_users':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_users(self, param)
+            ret_val = self._handle_query_users(param)
 
         elif action_id == 'query_files':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_files(self, param)
+            ret_val = self._handle_query_files(param)
 
         elif action_id == 'query_domain':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_domain(self, param)
+            ret_val = self._handle_query_domain(param)
 
         elif action_id == 'query_connections':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_connections(self, param)
+            ret_val = self._handle_query_connections(param)
 
         return ret_val
 

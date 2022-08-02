@@ -14,6 +14,8 @@
 
 import requests
 
+from cybereason_consts import DEFAULT_REQUEST_TIMEOUT
+
 
 class CybereasonSession:
 
@@ -26,7 +28,7 @@ class CybereasonSession:
         }
         try:
             url = "{0}/login.html".format(connector._base_url)
-            res = self.session.post(url, data=post_body, verify=connector._verify_server_cert)
+            res = self.session.post(url, data=post_body, verify=connector._verify_server_cert, timeout=DEFAULT_REQUEST_TIMEOUT)
             if self.session.cookies.get_dict().get("JSESSIONID") is None:
                 connector.save_progress("Error when logging in to the the Cybereason console: No session cookie returned")
                 connector.save_progress("Status code: {}".format(res.status_code))

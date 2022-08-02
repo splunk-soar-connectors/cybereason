@@ -31,3 +31,5 @@ INVALID_NON_NEGATIVE_INTEGER_ERR_MSG = "Please provide a valid non-negative inte
 
 MALOP_HISTORICAL_DAYS_KEY = "malop_historical_days asset configuration parameter"
 MALWARE_HISTORICAL_DAYS_KEY = "malware_historical_days asset configuration parameter"
+
+DEFAULT_REQUEST_TIMEOUT = 60  # in seconds

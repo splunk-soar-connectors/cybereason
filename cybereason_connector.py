@@ -353,8 +353,8 @@ class CybereasonConnector(BaseConnector):
 
         malop_id = self._get_string_param(param['malop_id'])
 
-        phantom_status = param['status']
-        cybereason_status = PHANTOM_TO_CYBEREASON_STATUS.get(phantom_status)
+        soar_status = param['status']
+        cybereason_status = SOAR_TO_CYBEREASON_STATUS.get(soar_status)
         if not cybereason_status:
             self.save_progress("Invalid status selected")
             return action_result.set_status(

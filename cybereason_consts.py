@@ -11,7 +11,7 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-PHANTOM_TO_CYBEREASON_STATUS = {
+SOAR_TO_CYBEREASON_STATUS = {
     'Unread': "UNREAD",
     'To Review': "TODO",
     'Not Relevant': "FP",

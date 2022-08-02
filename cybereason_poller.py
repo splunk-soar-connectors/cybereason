@@ -890,7 +890,7 @@ class CybereasonPoller:
         }
 
     # Converts timestamps from Cybereason API
-    # (e.g. string "1585270873770") to Phantom/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
+    # (e.g. string "1585270873770") to SOAR/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
     def _phtimestamp_from_crtimestamp(self, cybereason_timestamp):
         timestamp = datetime.datetime.fromtimestamp(int(cybereason_timestamp) / 1000.0)  # Timestamp is in epoch-milliseconds
         return timestamp.isoformat()[:-3] + "Z"  # Remove the microsecond accuracy, add "Z" for UTC timezone

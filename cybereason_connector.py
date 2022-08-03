@@ -237,7 +237,7 @@ class CybereasonConnector(BaseConnector):
             })
         except Exception as e:
             err = self._get_error_message_from_exception(e)
-            self.debug_print("Error occured: {}".format(err))
+            self.debug_print("Error occurred: {}".format(err))
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -949,49 +949,49 @@ class CybereasonConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), machine_names)
 
     def on_poll(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the on_poll function")
         self.save_progress("processing")
         poller = CybereasonPoller()
         return poller.do_poll(self, param)
 
     def _handle_query_processes(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_processes function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_processes(self, param)
 
     def _handle_query_machine(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_machine function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_machine(self, param)
 
     def _handle_query_machine_ip(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_machine_ip function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_machine_ip(self, param)
 
     def _handle_query_users(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_users function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_users(self, param)
 
     def _handle_query_files(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_files function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_files(self, param)
 
     def _handle_query_domain(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_domain function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_domain(self, param)
 
     def _handle_query_connections(self, param):
-        self.save_progress("Entered the function")
+        self.save_progress("Entered the _handle_query_connections function")
         self.save_progress("processing")
         query_action = CybereasonQueryActions()
         return query_action._handle_query_connections(self, param)

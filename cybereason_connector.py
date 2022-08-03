@@ -129,6 +129,7 @@ class CybereasonConnector(BaseConnector):
         return phantom.APP_SUCCESS, parameter
 
     def _handle_test_connectivity(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -143,6 +144,7 @@ class CybereasonConnector(BaseConnector):
                 'Successfully connected to the Cybereason console and verified session cookie'
             )
         else:
+            self.debug_print('Failure to verify session cookie.')
             return action_result.set_status(
                 phantom.APP_ERROR,
                 'Connectivity failed. Unable to get session cookie from Cybereason console'
@@ -235,6 +237,7 @@ class CybereasonConnector(BaseConnector):
             })
         except Exception as e:
             err = self._get_error_message_from_exception(e)
+            self.debug_print("Error occurred: {}".format(err))
             return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -350,8 +353,8 @@ class CybereasonConnector(BaseConnector):
 
         malop_id = self._get_string_param(param['malop_id'])
 
-        phantom_status = param['status']
-        cybereason_status = PHANTOM_TO_CYBEREASON_STATUS.get(phantom_status)
+        soar_status = param['status']
+        cybereason_status = SOAR_TO_CYBEREASON_STATUS.get(soar_status)
         if not cybereason_status:
             self.save_progress("Invalid status selected")
             return action_result.set_status(
@@ -945,6 +948,54 @@ class CybereasonConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), machine_names)
 
+    def on_poll(self, param):
+        self.save_progress("Entered the on_poll function")
+        self.save_progress("processing")
+        poller = CybereasonPoller()
+        return poller.do_poll(self, param)
+
+    def _handle_query_processes(self, param):
+        self.save_progress("Entered the _handle_query_processes function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_processes(self, param)
+
+    def _handle_query_machine(self, param):
+        self.save_progress("Entered the _handle_query_machine function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_machine(self, param)
+
+    def _handle_query_machine_ip(self, param):
+        self.save_progress("Entered the _handle_query_machine_ip function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_machine_ip(self, param)
+
+    def _handle_query_users(self, param):
+        self.save_progress("Entered the _handle_query_users function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_users(self, param)
+
+    def _handle_query_files(self, param):
+        self.save_progress("Entered the _handle_query_files function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_files(self, param)
+
+    def _handle_query_domain(self, param):
+        self.save_progress("Entered the _handle_query_domain function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_domain(self, param)
+
+    def _handle_query_connections(self, param):
+        self.save_progress("Entered the _handle_query_connections function")
+        self.save_progress("processing")
+        query_action = CybereasonQueryActions()
+        return query_action._handle_query_connections(self, param)
+
     def handle_action(self, param):
         ret_val = phantom.APP_SUCCESS
 
@@ -963,8 +1014,7 @@ class CybereasonConnector(BaseConnector):
             ret_val = self._handle_get_sensor_status(param)
 
         elif action_id == 'on_poll':
-            poller = CybereasonPoller()
-            ret_val = poller.do_poll(self, param)
+            ret_val = self.on_poll(param)
 
         elif action_id == 'add_malop_comment':
             ret_val = self._handle_add_malop_comment(param)
@@ -1000,32 +1050,25 @@ class CybereasonConnector(BaseConnector):
             ret_val = self._handle_restart_sensor(param)
 
         elif action_id == 'query_processes':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_processes(self, param)
+            ret_val = self._handle_query_processes(param)
 
         elif action_id == 'query_machine':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_machine(self, param)
+            ret_val = self._handle_query_machine(param)
 
         elif action_id == 'query_machine_ip':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_machine_ip(self, param)
+            ret_val = self._handle_query_machine_ip(param)
 
         elif action_id == 'query_users':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_users(self, param)
+            ret_val = self._handle_query_users(param)
 
         elif action_id == 'query_files':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_files(self, param)
+            ret_val = self._handle_query_files(param)
 
         elif action_id == 'query_domain':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_domain(self, param)
+            ret_val = self._handle_query_domain(param)
 
         elif action_id == 'query_connections':
-            query_action = CybereasonQueryActions()
-            ret_val = query_action._handle_query_connections(self, param)
+            ret_val = self._handle_query_connections(param)
 
         return ret_val
 
@@ -1055,6 +1098,7 @@ class CybereasonConnector(BaseConnector):
 
 def main():
     import argparse
+    import sys
 
     import pudb
 
@@ -1083,7 +1127,7 @@ def main():
             login_url = CybereasonConnector._get_phantom_base_url() + '/login'
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, timeout=DEFAULT_REQUEST_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
 
             data = dict()
@@ -1096,11 +1140,11 @@ def main():
             headers['Referer'] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, data=data, headers=headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             session_id = r2.cookies['sessionid']
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
-            exit(1)
+            sys.exit(1)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -1117,7 +1161,7 @@ def main():
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
 
 
 if __name__ == '__main__':

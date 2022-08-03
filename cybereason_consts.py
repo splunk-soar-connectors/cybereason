@@ -11,7 +11,7 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-PHANTOM_TO_CYBEREASON_STATUS = {
+SOAR_TO_CYBEREASON_STATUS = {
     'Unread': "UNREAD",
     'To Review': "TODO",
     'Not Relevant': "FP",
@@ -31,3 +31,5 @@ INVALID_NON_NEGATIVE_INTEGER_ERR_MSG = "Please provide a valid non-negative inte
 
 MALOP_HISTORICAL_DAYS_KEY = "malop_historical_days asset configuration parameter"
 MALWARE_HISTORICAL_DAYS_KEY = "malware_historical_days asset configuration parameter"
+
+DEFAULT_REQUEST_TIMEOUT = 60  # in seconds

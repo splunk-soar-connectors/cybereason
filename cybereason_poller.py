@@ -368,14 +368,15 @@ class CybereasonPoller:
 
         return phantom.APP_SUCCESS if success else phantom.APP_ERROR
 
-    def _does_container_exist_for_malop_malware(self, connector, malop_id):
+    def _does_container_exist_for_malop_malware(self, connector, source_data_identifier):
         url = '{0}rest/container?_filter_source_data_identifier="{1}"&_filter_asset={2}'.format(
             connector.get_phantom_base_url(),
-            malop_id, connector.get_asset_id()
+            source_data_identifier, connector.get_asset_id()
         )
+        existing_container_id = False
 
         try:
-            r = requests.get(url, verify=False)
+            r = requests.get(url, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -402,7 +403,7 @@ class CybereasonPoller:
             update_json = container.copy()
             del update_json["artifacts"]
             url = '{0}rest/container/{1}'.format(connector.get_phantom_base_url(), existing_container_id)
-            r = requests.post(url, json=update_json, verify=False)
+            r = requests.post(url, json=update_json, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
 
             for artifact in container["artifacts"]:
@@ -435,7 +436,7 @@ class CybereasonPoller:
         url = '{0}rest/artifact?_filter_source_data_identifier="{1}"&_filter_container_id={2}&sort=id&order=desc'.format(
                         connector.get_phantom_base_url(), source_data_identifier, container_id)
         try:
-            r = requests.get(url, verify=False)
+            r = requests.get(url, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -762,7 +763,7 @@ class CybereasonPoller:
     def _ingest_malware(self, connector, config, malware):
         success = phantom.APP_ERROR
         container = self._get_container_dict_for_malware(connector, config, malware)
-        existing_container_id = self._does_container_exist_for_malop_malware(connector, malware["guid"])
+        existing_container_id = self._does_container_exist_for_malop_malware(connector, "{}_{}".format(malware["guid"], malware["timestamp"]))
         if not existing_container_id:
             # Container does not exist. Go ahead and save it
             connector.debug_print("Saving container for Malware with id {}".format(malware["guid"]))
@@ -782,7 +783,7 @@ class CybereasonPoller:
         )
         container_json["data"] = malware
         container_json["description"] = malware["name"]
-        container_json["source_data_identifier"] = malware["guid"]
+        container_json["source_data_identifier"] = "{}_{}".format(malware["guid"], malware["timestamp"])
         container_json["label"] = config.get("ingest", {}).get("container_label")
         status_map = self._get_status_map_malware()
         container_json["status"] = status_map.get(malware["status"], "New")
@@ -889,7 +890,7 @@ class CybereasonPoller:
         }
 
     # Converts timestamps from Cybereason API
-    # (e.g. string "1585270873770") to Phantom/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
+    # (e.g. string "1585270873770") to SOAR/ISO 8601 format (e.g. 2020-03-27T01:01:13.770Z)
     def _phtimestamp_from_crtimestamp(self, cybereason_timestamp):
         timestamp = datetime.datetime.fromtimestamp(int(cybereason_timestamp) / 1000.0)  # Timestamp is in epoch-milliseconds
         return timestamp.isoformat()[:-3] + "Z"  # Remove the microsecond accuracy, add "Z" for UTC timezone

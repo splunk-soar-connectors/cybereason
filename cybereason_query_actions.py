@@ -14,7 +14,6 @@
 
 import traceback
 
-# Phantom App imports
 import phantom.app as phantom
 from phantom.action_result import ActionResult
 

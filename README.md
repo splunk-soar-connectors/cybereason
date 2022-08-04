@@ -2,20 +2,20 @@
 # Cybereason
 
 Publisher: Cybereason  
-Connector Version: 2\.1\.3  
+Connector Version: 2\.2\.0  
 Product Vendor: Cybereason  
 Product Name: Cybereason  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Minimum Product Version: 5\.3\.0  
 
 This app integrates with the Cybereason platform to perform investigative, contain, and corrective actions on Malop and Malware events
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # ""
 [comment]: # "  Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "  you may not use this file except in compliance with the License."
 [comment]: # "  You may obtain a copy of the License at"
-[comment]: # "  "
+[comment]: # ""
 [comment]: # "      http://www.apache.org/licenses/LICENSE-2.0"
 [comment]: # ""
 [comment]: # "  Unless required by applicable law or agreed to in writing, software distributed under"

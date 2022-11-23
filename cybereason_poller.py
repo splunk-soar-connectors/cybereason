@@ -463,7 +463,7 @@ class CybereasonPoller:
         malops_dict = {}
         url = f"{connector._base_url}/rest/detection/inbox"
         query = {"startTime": start_timestamp, "endTime": end_timestamp}
-        malop_res = self.cr_session.post(url=url, json=query, headers=connector._headers)   # Long running request
+        malop_res = self.cr_session.post(url=url, json=query, headers=connector._headers)
         malops = json.loads(malop_res.content)
         connector.save_progress(f"Malops response: {len(malops['malops'])}")
 
@@ -483,7 +483,6 @@ class CybereasonPoller:
                     "perFeatureLimit": max_number_malops
                 }
                 res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
-                # connector.save_progress("EDR Malop : {}".format(res.json()["data"]["resultIdToElementDataMap"]))
                 malops_dict[malop['guid']] = res.json()["data"]["resultIdToElementDataMap"][malop['guid']]
             else:
                 malops_dict[malop['guid']] = malop
@@ -775,9 +774,7 @@ class CybereasonPoller:
             "limit": max_malwares_in_each_fetch,
             "offset": offset
         }
-        return self.cr_session.post(
-            url=url, json=query, headers=connector._headers,
-            verify=connector._verify_server_cert, timeout=DEFAULT_REQUEST_TIMEOUT)
+        return self.cr_session.post(url=url, json=query, headers=connector._headers, verify=connector._verify_server_cert)
 
     def _ingest_malware(self, connector, config, malware):
         success = phantom.APP_ERROR

@@ -2,11 +2,11 @@
 # Cybereason
 
 Publisher: Cybereason  
-Connector Version: 2\.2\.0  
+Connector Version: 2\.3\.0  
 Product Vendor: Cybereason  
 Product Name: Cybereason  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.0  
+Minimum Product Version: 5\.2\.0  
 
 This app integrates with the Cybereason platform to perform investigative, contain, and corrective actions on Malop and Malware events
 

@@ -376,7 +376,7 @@ class CybereasonPoller:
         existing_container_id = False
 
         try:
-            r = requests.get(url, verify=False)
+            r = requests.get(url, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -403,7 +403,7 @@ class CybereasonPoller:
             update_json = container.copy()
             del update_json["artifacts"]
             url = '{0}rest/container/{1}'.format(connector.get_phantom_base_url(), existing_container_id)
-            r = requests.post(url, json=update_json, verify=False)
+            r = requests.post(url, json=update_json, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
 
             for artifact in container["artifacts"]:
@@ -436,7 +436,7 @@ class CybereasonPoller:
         url = '{0}rest/artifact?_filter_source_data_identifier="{1}"&_filter_container_id={2}&sort=id&order=desc'.format(
                         connector.get_phantom_base_url(), source_data_identifier, container_id)
         try:
-            r = requests.get(url, verify=False)
+            r = requests.get(url, verify=False, timeout=DEFAULT_REQUEST_TIMEOUT)  # nosemgrep
             resp_json = r.json()
         except Exception as e:
             err = connector._get_error_message_from_exception(e)

@@ -80,7 +80,7 @@ class CybereasonPoller:
             # When called as a scheduled poll, max_container count comes as 4294967295 which causes a Cybereason API error.
             container_count = min(int(param.get(phantom.APP_JSON_CONTAINER_COUNT)), 5000)
             success = success & self._fetch_and_ingest_malops(
-                                connector, config, malop_start_time_microsec_timestamp, current_time.timestamp()*1000, container_count)
+                                connector, config, malop_start_time_microsec_timestamp, current_time.timestamp() * 1000, container_count)
             success = success & self._fetch_and_ingest_malwares(
                                 connector, config, malware_millisec_since_last_poll, container_count)
         except Exception as e:

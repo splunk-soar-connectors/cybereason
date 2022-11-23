@@ -99,32 +99,32 @@ class CybereasonConnector(BaseConnector):
         :return: error message
         """
 
-        error_code = ERR_CODE_MSG
-        error_msg = ERR_MSG_UNAVAILABLE
+        error_code = ERROR_CODE_MESSAGE
+        error_message = ERROR_MESSAGE_UNAVAILABLE
         try:
             if e.args:
                 if len(e.args) > 1:
                     error_code = e.args[0]
-                    error_msg = e.args[1]
+                    error_message = e.args[1]
                 elif len(e.args) == 1:
-                    error_msg = e.args[0]
+                    error_message = e.args[0]
         except:
             pass
 
-        return "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
+        return "Error Code: {0}. Error Message: {1}".format(error_code, error_message)
 
     def _validate_integer(self, action_result, parameter, key):
         if parameter is not None:
             try:
                 if not float(parameter).is_integer():
-                    return action_result.set_status(phantom.APP_ERROR, INVALID_INTEGER_ERR_MSG.format(key)), None
+                    return action_result.set_status(phantom.APP_ERROR, INVALID_INTEGER_ERROR_MESSAGE.format(key)), None
 
                 parameter = int(parameter)
             except:
-                return action_result.set_status(phantom.APP_ERROR, INVALID_INTEGER_ERR_MSG.format(key)), None
+                return action_result.set_status(phantom.APP_ERROR, INVALID_INTEGER_ERROR_MESSAGE.format(key)), None
 
             if parameter < 0:
-                return action_result.set_status(phantom.APP_ERROR, INVALID_NON_NEGATIVE_INTEGER_ERR_MSG.format(key)), None
+                return action_result.set_status(phantom.APP_ERROR, INVALID_NON_NEGATIVE_INTEGER_ERROR_MESSAGE.format(key)), None
 
         return phantom.APP_SUCCESS, parameter
 
@@ -236,9 +236,9 @@ class CybereasonConnector(BaseConnector):
                 "initiating_user": result["initiatingUser"]
             })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.debug_print("Error occurred: {}".format(err))
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            self.debug_print("Error occurred: {}".format(error))
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -307,8 +307,8 @@ class CybereasonConnector(BaseConnector):
                     "status": "Online" if machine_details["simpleValues"]["isConnected"]["values"][0] == "true" else "Offline"
                 })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -337,11 +337,11 @@ class CybereasonConnector(BaseConnector):
                 self._process_response(res, action_result)
                 return action_result.get_status()
         except requests.exceptions.ConnectionError:
-            err = "Error Details: Connection refused from the server"
-            return action_result.set_status(phantom.APP_ERROR, err)
+            error = "Error Details: Connection refused from the server"
+            return action_result.set_status(phantom.APP_ERROR, error)
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Add malop comment action executed successfully")
 
@@ -375,8 +375,8 @@ class CybereasonConnector(BaseConnector):
                 return action_result.get_status()
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Update malop status action executed successfully")
 
@@ -405,8 +405,8 @@ class CybereasonConnector(BaseConnector):
                 return action_result.get_status()
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -435,8 +435,8 @@ class CybereasonConnector(BaseConnector):
                 return action_result.get_status()
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -477,8 +477,8 @@ class CybereasonConnector(BaseConnector):
                     "response_from_server": res.json()
             })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -517,8 +517,8 @@ class CybereasonConnector(BaseConnector):
                     "response_from_server": res.json()
             })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -561,10 +561,10 @@ class CybereasonConnector(BaseConnector):
                     "remediation_status": result["statusLog"][0]["status"]
                 })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.debug_print(err)
+            error = self._get_error_message_from_exception(e)
+            self.debug_print(error)
             self.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -595,13 +595,13 @@ class CybereasonConnector(BaseConnector):
                 "remediation_message": error_obj.get("message", "Unknown error") if error_obj is not None else "No error message"
             })
         except requests.exceptions.ConnectionError:
-            err = "Error Details: Connection refused from the server"
-            return action_result.set_status(phantom.APP_ERROR, err)
+            error = "Error Details: Connection refused from the server"
+            return action_result.set_status(phantom.APP_ERROR, error)
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.debug_print(err)
+            error = self._get_error_message_from_exception(e)
+            self.debug_print(error)
             self.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -638,8 +638,8 @@ class CybereasonConnector(BaseConnector):
 
             self.save_progress("{0}ed...".format(custom_reputation))
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Set reputation action executed successfully")
 
@@ -699,9 +699,9 @@ class CybereasonConnector(BaseConnector):
                 sensor_ids.append(str(machine_details['simpleValues']['pylumId']['values'][0]))
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.save_progress(err)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err)), None)
+            error = self._get_error_message_from_exception(e)
+            self.save_progress(error)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error)), None)
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), sensor_ids)
 
@@ -720,9 +720,9 @@ class CybereasonConnector(BaseConnector):
                 "sensor_ids_by_machine_name": sensors_by_name
             })
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.save_progress(err)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err)), [])
+            error = self._get_error_message_from_exception(e)
+            self.save_progress(error)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error)), [])
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), sensor_ids)
 
@@ -757,9 +757,9 @@ class CybereasonConnector(BaseConnector):
                     sensor_ids.append(sensor['pylumId'])
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.save_progress(err)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err)), [])
+            error = self._get_error_message_from_exception(e)
+            self.save_progress(error)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error)), [])
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), sensor_ids)
 
@@ -795,9 +795,9 @@ class CybereasonConnector(BaseConnector):
                     sensor_ids.append(sensor['pylumId'])
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.save_progress(err)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err)), [])
+            error = self._get_error_message_from_exception(e)
+            self.save_progress(error)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error)), [])
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), sensor_ids)
 
@@ -850,8 +850,8 @@ class CybereasonConnector(BaseConnector):
             action_result.add_data(json_res)
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully requested for sensor upgrade")
 
@@ -905,8 +905,8 @@ class CybereasonConnector(BaseConnector):
             action_result.add_data(json_res)
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            error = self._get_error_message_from_exception(e)
+            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully requested for sensor restart")
 
@@ -942,9 +942,9 @@ class CybereasonConnector(BaseConnector):
                     machine_names.append(str(sensor_details['machineName']))
 
         except Exception as e:
-            err = self._get_error_message_from_exception(e)
-            self.save_progress(err)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err)), None)
+            error = self._get_error_message_from_exception(e)
+            self.save_progress(error)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(error)), None)
 
         return RetVal(action_result.set_status(phantom.APP_SUCCESS), machine_names)
 

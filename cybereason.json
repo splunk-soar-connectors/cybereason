@@ -10,12 +10,12 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Cybereason",
-    "license": "Copyright (c) Cybereason, 2018-2021",
+    "license": "Copyright (c) Cybereason, 2018-2022",
     "app_version": "2.3.0",
     "utctime_updated": "2022-01-07T20:19:08.000000Z",
     "package_name": "phantom_cybereason",
     "main_module": "cybereason_connector.py",
-    "min_phantom_version": "5.3.0",
+    "min_phantom_version": "5.3.5",
     "app_wizard_version": "1.0.0",
     "fips_compliant": false,
     "configuration": {
@@ -149,13 +149,14 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.malop_id",
+                    "data_path": "action_result.status",
                     "data_type": "string",
-                    "contains": [
-                        "cybereason malop id"
-                    ],
-                    "column_name": "Malop ID",
-                    "column_order": 0
+                    "column_name": "Status",
+                    "column_order": 4,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.machine_name",
@@ -167,13 +168,13 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.*.remediation_id",
+                    "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
-                        "cybereason remediation id"
+                        "cybereason malop id"
                     ],
-                    "column_name": "Remediation ID",
-                    "column_order": 2
+                    "column_name": "Malop ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.initiating_user",
@@ -185,21 +186,20 @@
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.remediation_id",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 4,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "contains": [
+                        "cybereason remediation id"
+                    ],
+                    "column_name": "Remediation ID",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -243,6 +243,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 4,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -252,15 +262,6 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.data.*.machine_name",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason machine name"
-                    ],
-                    "column_name": "Machine Name",
-                    "column_order": 1
-                },
-                {
                     "data_path": "action_result.data.*.machine_id",
                     "data_type": "string",
                     "contains": [
@@ -268,6 +269,15 @@
                     ],
                     "column_name": "Machine ID",
                     "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.machine_name",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason machine name"
+                    ],
+                    "column_name": "Machine Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.status",
@@ -283,21 +293,11 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 4,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -345,25 +345,6 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.malop_id",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason malop id"
-                    ],
-                    "column_name": "Malop ID",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.comment",
-                    "data_type": "string",
-                    "column_name": "Comment",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
@@ -374,11 +355,30 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.parameter.comment",
+                    "data_type": "string",
+                    "column_name": "Comment",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.malop_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason malop id"
+                    ],
+                    "column_name": "Malop ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data",
                     "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -439,6 +439,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -461,21 +471,11 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 2,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -519,6 +519,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -532,21 +542,11 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -590,6 +590,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -603,21 +613,11 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -661,6 +661,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.machine_name_or_ip",
                     "data_type": "string",
                     "contains": [
@@ -674,21 +684,11 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -732,6 +732,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.machine_name_or_ip",
                     "data_type": "string",
                     "contains": [
@@ -745,21 +755,11 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -832,22 +832,14 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.malop_id",
+                    "data_path": "action_result.status",
                     "data_type": "string",
-                    "contains": [
-                        "cybereason malop id"
-                    ],
-                    "column_name": "Malop ID",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.remediation_user",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason user"
-                    ],
-                    "column_name": "Remediation User",
-                    "column_order": 1
+                    "column_name": "Status",
+                    "column_order": 6,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.machine_id",
@@ -859,6 +851,15 @@
                     "column_order": 2
                 },
                 {
+                    "data_path": "action_result.parameter.malop_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason malop id"
+                    ],
+                    "column_name": "Malop ID",
+                    "column_order": 0
+                },
+                {
                     "data_path": "action_result.parameter.process_id",
                     "data_type": "string",
                     "contains": [
@@ -866,6 +867,15 @@
                     ],
                     "column_name": "Process ID",
                     "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.remediation_user",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason user"
+                    ],
+                    "column_name": "Remediation User",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.remediation_id",
@@ -886,21 +896,11 @@
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 6,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -963,6 +963,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 5,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -970,15 +980,6 @@
                     ],
                     "column_name": "Malop ID",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.remediation_user",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason user"
-                    ],
-                    "column_name": "Remediation User",
-                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.remediation_id",
@@ -990,6 +991,21 @@
                     "column_order": 2
                 },
                 {
+                    "data_path": "action_result.parameter.remediation_user",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason user"
+                    ],
+                    "column_name": "Remediation User",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.remediation_message",
+                    "data_type": "string",
+                    "column_name": "Remediation Message",
+                    "column_order": 4
+                },
+                {
                     "data_path": "action_result.data.*.remediation_status",
                     "data_type": "string",
                     "contains": [
@@ -999,27 +1015,11 @@
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.remediation_message",
-                    "data_type": "string",
-                    "column_name": "Remediation Message",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 5,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1073,25 +1073,6 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.reputation_item_hash",
-                    "data_type": "string",
-                    "contains": [
-                        "hash"
-                    ],
-                    "column_name": "Reputation Item Hash",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.custom_reputation",
-                    "data_type": "string",
-                    "column_name": "Custom Reputation",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
@@ -1102,11 +1083,30 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.parameter.custom_reputation",
+                    "data_type": "string",
+                    "column_name": "Custom Reputation",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.reputation_item_hash",
+                    "data_type": "string",
+                    "contains": [
+                        "hash"
+                    ],
+                    "column_name": "Reputation Item Hash",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data",
                     "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1149,6 +1149,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.malop_id",
                     "data_type": "string",
                     "contains": [
@@ -1156,24 +1166,6 @@
                     ],
                     "column_name": "Malop ID",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.process_id",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason process id"
-                    ],
-                    "column_name": "Process ID",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.process_name",
-                    "data_type": "string",
-                    "contains": [
-                        "cybereason process name"
-                    ],
-                    "column_name": "Process Name",
-                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.owner_machine_id",
@@ -1194,21 +1186,29 @@
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.process_id",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
+                    "contains": [
+                        "cybereason process id"
+                    ],
+                    "column_name": "Process ID",
+                    "column_order": 2
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.process_name",
+                    "data_type": "string",
+                    "contains": [
+                        "cybereason process name"
+                    ],
+                    "column_name": "Process Name",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1247,10 +1247,26 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 6,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.name",
                     "data_type": "string",
                     "column_name": "Name",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.is_connected_to_cybereason",
+                    "data_type": "string",
+                    "column_name": "Is Connected To Cybereason",
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.machine_id",
@@ -1280,27 +1296,11 @@
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.is_connected_to_cybereason",
-                    "data_type": "string",
-                    "column_name": "Is Connected To Cybereason",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 6,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1343,6 +1343,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 6,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.machine_ip",
                     "data_type": "string",
                     "contains": [
@@ -1350,6 +1360,12 @@
                     ],
                     "column_name": "Machine IP",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.is_connected_to_cybereason",
+                    "data_type": "string",
+                    "column_name": "Is Connected To Cybereason",
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.machine_id",
@@ -1379,27 +1395,11 @@
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.is_connected_to_cybereason",
-                    "data_type": "string",
-                    "column_name": "Is Connected To Cybereason",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 6,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1442,6 +1442,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 6,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.user",
                     "data_type": "string",
                     "contains": [
@@ -1449,12 +1459,6 @@
                     ],
                     "column_name": "User",
                     "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.element_name",
-                    "data_type": "string",
-                    "column_name": "Element Name",
-                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.domain",
@@ -1466,16 +1470,16 @@
                     "column_order": 1
                 },
                 {
+                    "data_path": "action_result.data.*.element_name",
+                    "data_type": "string",
+                    "column_name": "Element Name",
+                    "column_order": 0
+                },
+                {
                     "data_path": "action_result.data.*.last_machine_logged_into",
                     "data_type": "string",
                     "column_name": "Last Machine Logged Into",
                     "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.organization",
-                    "data_type": "string",
-                    "column_name": "Organization",
-                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.local_system",
@@ -1484,21 +1488,17 @@
                     "column_order": 4
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.organization",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 6,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "column_name": "Organization",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1541,6 +1541,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 9,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.file_name",
                     "data_type": "string",
                     "contains": [
@@ -1550,34 +1560,22 @@
                     "column_order": 8
                 },
                 {
-                    "data_path": "action_result.data.*.element_name",
-                    "data_type": "string",
-                    "column_name": "Element Name",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.suspicion_count",
-                    "data_type": "string",
-                    "column_name": "Suspicion Count",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.signed",
-                    "data_type": "string",
-                    "column_name": "Signed",
-                    "column_order": 2
-                },
-                {
                     "data_path": "action_result.data.*.SHA1_signature",
                     "data_type": "string",
                     "column_name": "SHA1 Signature",
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.size",
+                    "data_path": "action_result.data.*.company_name",
                     "data_type": "string",
-                    "column_name": "Size",
-                    "column_order": 4
+                    "column_name": "Company Name",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.element_name",
+                    "data_type": "string",
+                    "column_name": "Element Name",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.path",
@@ -1592,27 +1590,29 @@
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.data.*.company_name",
+                    "data_path": "action_result.data.*.signed",
                     "data_type": "string",
-                    "column_name": "Company Name",
-                    "column_order": 7
+                    "column_name": "Signed",
+                    "column_order": 2
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.size",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 9,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
+                    "column_name": "Size",
+                    "column_order": 4
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.suspicion_count",
+                    "data_type": "string",
+                    "column_name": "Suspicion Count",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1655,6 +1655,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 6,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.domain_name",
                     "data_type": "string",
                     "contains": [
@@ -1670,16 +1680,16 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.data.*.malicious_classification_type",
-                    "data_type": "string",
-                    "column_name": "Malicious Classification Type",
-                    "column_order": 1
-                },
-                {
                     "data_path": "action_result.data.*.is_internal_domain",
                     "data_type": "string",
                     "column_name": "Is Internal Domain",
                     "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.malicious_classification_type",
+                    "data_type": "string",
+                    "column_name": "Malicious Classification Type",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.was_ever_resolved",
@@ -1694,21 +1704,11 @@
                     "column_order": 4
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 6,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.summary",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1747,16 +1747,20 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 12,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.connection_name",
                     "data_type": "string",
                     "column_name": "Connection Name",
                     "column_order": 11
-                },
-                {
-                    "data_path": "action_result.data.*.element_name",
-                    "data_type": "string",
-                    "column_name": "Element Name",
-                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.direction",
@@ -1765,16 +1769,28 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.*.server_address",
+                    "data_path": "action_result.data.*.dns_query",
                     "data_type": "string",
-                    "column_name": "Server Address",
-                    "column_order": 2
+                    "column_name": "Dns Query",
+                    "column_order": 10
                 },
                 {
-                    "data_path": "action_result.data.*.server_port",
+                    "data_path": "action_result.data.*.element_name",
                     "data_type": "string",
-                    "column_name": "Server Port",
-                    "column_order": 3
+                    "column_name": "Element Name",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.owner_machine",
+                    "data_type": "string",
+                    "column_name": "Owner Machine",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.owner_process",
+                    "data_type": "string",
+                    "column_name": "Owner Process",
+                    "column_order": 9
                 },
                 {
                     "data_path": "action_result.data.*.port_type",
@@ -1792,51 +1808,35 @@
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.data.*.transmitted_bytes",
-                    "data_type": "string",
-                    "column_name": "Transmitted Bytes",
-                    "column_order": 6
-                },
-                {
                     "data_path": "action_result.data.*.remote_address",
                     "data_type": "string",
                     "column_name": "Remote Address",
                     "column_order": 7
                 },
                 {
-                    "data_path": "action_result.data.*.owner_machine",
+                    "data_path": "action_result.data.*.server_address",
                     "data_type": "string",
-                    "column_name": "Owner Machine",
-                    "column_order": 8
+                    "column_name": "Server Address",
+                    "column_order": 2
                 },
                 {
-                    "data_path": "action_result.data.*.owner_process",
+                    "data_path": "action_result.data.*.server_port",
                     "data_type": "string",
-                    "column_name": "Owner Process",
-                    "column_order": 9
+                    "column_name": "Server Port",
+                    "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.dns_query",
+                    "data_path": "action_result.data.*.transmitted_bytes",
                     "data_type": "string",
-                    "column_name": "Dns Query",
-                    "column_order": 10
-                },
-                {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 12,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "column_name": "Transmitted Bytes",
+                    "column_order": 6
                 },
                 {
                     "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
@@ -1880,6 +1880,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.pylumid",
                     "data_type": "string",
                     "contains": [
@@ -1895,26 +1905,16 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.summary",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 2,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
+                    "column_name": "Summary",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "column_name": "Message",
                     "column_order": 4
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string",
-                    "column_name": "Summary",
-                    "column_order": 3
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -1957,6 +1957,16 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.pylumid",
                     "data_type": "string",
                     "contains": [
@@ -1972,26 +1982,16 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.summary",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 2,
-                    "example_values": [
-                        "success",
-                        "failed"
-                    ]
+                    "column_name": "Summary",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "column_name": "Message",
                     "column_order": 4
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string",
-                    "column_name": "Summary",
-                    "column_order": 3
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -2022,7 +2022,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.6.15-py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.9.24-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -2042,7 +2042,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.11-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.13-py2.py3-none-any.whl"
             }
         ]
     }

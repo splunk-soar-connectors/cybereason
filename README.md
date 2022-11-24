@@ -6,7 +6,7 @@ Connector Version: 2\.3\.0
 Product Vendor: Cybereason  
 Product Name: Cybereason  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.0  
+Minimum Product Version: 5\.3\.5  
 
 This app integrates with the Cybereason platform to perform investigative, contain, and corrective actions on Malop and Malware events
 
@@ -132,13 +132,13 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.parameter\.machine\_name | string |  `cybereason machine name` 
-action\_result\.data\.\*\.remediation\_id | string |  `cybereason remediation id` 
-action\_result\.data\.\*\.initiating\_user | string |  `cybereason user` 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.machine\_name | string |  `cybereason machine name` 
+action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
+action\_result\.data\.\*\.initiating\_user | string |  `cybereason user` 
+action\_result\.data\.\*\.remediation\_id | string |  `cybereason remediation id` 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -158,13 +158,13 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.data\.\*\.machine\_name | string |  `cybereason machine name` 
-action\_result\.data\.\*\.machine\_id | string |  `cybereason machine id` 
-action\_result\.data\.\*\.status | string |  `cybereason sensor status` 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
+action\_result\.data\.\*\.machine\_id | string |  `cybereason machine id` 
+action\_result\.data\.\*\.machine\_name | string |  `cybereason machine name` 
+action\_result\.data\.\*\.status | string |  `cybereason sensor status` 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -183,12 +183,12 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.parameter\.comment | string | 
-action\_result\.data | string | 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.comment | string | 
+action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
+action\_result\.data | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -207,12 +207,12 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
 action\_result\.parameter\.status | string |  `cybereason malop status` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -230,11 +230,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -252,11 +252,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -274,11 +274,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.machine\_name\_or\_ip | string |  `cybereason machine name or ip` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -296,11 +296,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.machine\_name\_or\_ip | string |  `cybereason machine name or ip` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -321,15 +321,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.parameter\.remediation\_user | string |  `cybereason user` 
+action\_result\.status | string | 
 action\_result\.parameter\.machine\_id | string |  `cybereason machine id` 
+action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
 action\_result\.parameter\.process\_id | string |  `cybereason process id` 
+action\_result\.parameter\.remediation\_user | string |  `cybereason user` 
 action\_result\.data\.\*\.remediation\_id | string |  `cybereason remediation id` 
 action\_result\.data\.\*\.remediation\_status | string |  `cybereason remediation status` 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -349,14 +349,14 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.parameter\.remediation\_user | string |  `cybereason user` 
-action\_result\.parameter\.remediation\_id | string |  `cybereason remediation id` 
-action\_result\.data\.\*\.remediation\_status | string |  `cybereason remediation status` 
-action\_result\.data\.\*\.remediation\_message | string | 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
+action\_result\.parameter\.remediation\_id | string |  `cybereason remediation id` 
+action\_result\.parameter\.remediation\_user | string |  `cybereason user` 
+action\_result\.data\.\*\.remediation\_message | string | 
+action\_result\.data\.\*\.remediation\_status | string |  `cybereason remediation status` 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -375,12 +375,12 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.reputation\_item\_hash | string |  `hash` 
-action\_result\.parameter\.custom\_reputation | string | 
-action\_result\.data | string | 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.custom\_reputation | string | 
+action\_result\.parameter\.reputation\_item\_hash | string |  `hash` 
+action\_result\.data | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -398,14 +398,14 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.malop\_id | string |  `cybereason malop id` 
-action\_result\.data\.\*\.process\_id | string |  `cybereason process id` 
-action\_result\.data\.\*\.process\_name | string |  `cybereason process name` 
 action\_result\.data\.\*\.owner\_machine\_id | string |  `cybereason machine id` 
 action\_result\.data\.\*\.owner\_machine\_name | string |  `cybereason machine name` 
-action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.data\.\*\.process\_id | string |  `cybereason process id` 
+action\_result\.data\.\*\.process\_name | string |  `cybereason process name` 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -423,15 +423,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.name | string | 
+action\_result\.data\.\*\.is\_connected\_to\_cybereason | string | 
 action\_result\.data\.\*\.machine\_id | string |  `cybereason machine id` 
 action\_result\.data\.\*\.machine\_name | string | 
 action\_result\.data\.\*\.os\_version | string | 
 action\_result\.data\.\*\.platform\_architecture | string | 
-action\_result\.data\.\*\.is\_connected\_to\_cybereason | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -449,15 +449,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.machine\_ip | string |  `ip` 
+action\_result\.data\.\*\.is\_connected\_to\_cybereason | string | 
 action\_result\.data\.\*\.machine\_id | string |  `cybereason machine id` 
 action\_result\.data\.\*\.machine\_name | string | 
 action\_result\.data\.\*\.os\_version | string | 
 action\_result\.data\.\*\.platform\_architecture | string | 
-action\_result\.data\.\*\.is\_connected\_to\_cybereason | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -475,15 +475,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.user | string |  `cybereason user` 
-action\_result\.data\.\*\.element\_name | string | 
-action\_result\.data\.\*\.domain | string |  `domain` 
-action\_result\.data\.\*\.last\_machine\_logged\_into | string | 
-action\_result\.data\.\*\.organization | string | 
-action\_result\.data\.\*\.local\_system | string | 
 action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.parameter\.user | string |  `cybereason user` 
+action\_result\.data\.\*\.domain | string |  `domain` 
+action\_result\.data\.\*\.element\_name | string | 
+action\_result\.data\.\*\.last\_machine\_logged\_into | string | 
+action\_result\.data\.\*\.local\_system | string | 
+action\_result\.data\.\*\.organization | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -501,18 +501,18 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.file\_name | string |  `file name` 
-action\_result\.data\.\*\.element\_name | string | 
-action\_result\.data\.\*\.suspicion\_count | string | 
-action\_result\.data\.\*\.signed | string | 
 action\_result\.data\.\*\.SHA1\_signature | string | 
-action\_result\.data\.\*\.size | string | 
+action\_result\.data\.\*\.company\_name | string | 
+action\_result\.data\.\*\.element\_name | string | 
 action\_result\.data\.\*\.path | string | 
 action\_result\.data\.\*\.product\_name | string | 
-action\_result\.data\.\*\.company\_name | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.data\.\*\.signed | string | 
+action\_result\.data\.\*\.size | string | 
+action\_result\.data\.\*\.suspicion\_count | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -530,15 +530,15 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.domain\_name | string |  `domain` 
 action\_result\.data\.\*\.element\_name | string | 
-action\_result\.data\.\*\.malicious\_classification\_type | string | 
 action\_result\.data\.\*\.is\_internal\_domain | string | 
+action\_result\.data\.\*\.malicious\_classification\_type | string | 
 action\_result\.data\.\*\.was\_ever\_resolved | string | 
 action\_result\.data\.\*\.was\_ever\_resolved\_as\_second\_level\_domain | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -556,21 +556,21 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.connection\_name | string | 
-action\_result\.data\.\*\.element\_name | string | 
 action\_result\.data\.\*\.direction | string | 
-action\_result\.data\.\*\.server\_address | string | 
-action\_result\.data\.\*\.server\_port | string | 
-action\_result\.data\.\*\.port\_type | string |  `port` 
-action\_result\.data\.\*\.received\_bytes | string | 
-action\_result\.data\.\*\.transmitted\_bytes | string | 
-action\_result\.data\.\*\.remote\_address | string | 
+action\_result\.data\.\*\.dns\_query | string | 
+action\_result\.data\.\*\.element\_name | string | 
 action\_result\.data\.\*\.owner\_machine | string | 
 action\_result\.data\.\*\.owner\_process | string | 
-action\_result\.data\.\*\.dns\_query | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
+action\_result\.data\.\*\.port\_type | string |  `port` 
+action\_result\.data\.\*\.received\_bytes | string | 
+action\_result\.data\.\*\.remote\_address | string | 
+action\_result\.data\.\*\.server\_address | string | 
+action\_result\.data\.\*\.server\_port | string | 
+action\_result\.data\.\*\.transmitted\_bytes | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -590,11 +590,11 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.pylumid | string |  `cybereason sensor pylum id` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
 
@@ -614,10 +614,10 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
+action\_result\.status | string | 
 action\_result\.parameter\.pylumid | string |  `cybereason sensor pylum id` 
 action\_result\.data | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
 action\_result\.summary | string | 
+action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric | 

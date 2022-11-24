@@ -80,7 +80,7 @@ class CybereasonPoller:
             # When called as a scheduled poll, max_container count comes as 4294967295 which causes a Cybereason API error.
             container_count = min(int(param.get(phantom.APP_JSON_CONTAINER_COUNT)), 5000)
             success = success & self._fetch_and_ingest_malops(
-                                connector, config, malop_start_time_microsec_timestamp, container_count)
+                                connector, config, malop_start_time_microsec_timestamp, current_time.timestamp() * 1000, container_count)
             success = success & self._fetch_and_ingest_malwares(
                                 connector, config, malware_millisec_since_last_poll, container_count)
         except Exception as e:
@@ -101,10 +101,10 @@ class CybereasonPoller:
                 "Error when polling for Malop and Malware. Please refer the logs for more details"
             )
 
-    def _fetch_and_ingest_malops(self, connector, config, start_time_microsec_timestamp, container_count):
+    def _fetch_and_ingest_malops(self, connector, config, start_time_microsec_timestamp, end_time_microsec, container_count):
         # Fetch Malops
         success = True
-        malops_dict = self._get_malops(connector, start_time_microsec_timestamp, container_count)
+        malops_dict = self._get_malops(connector, start_time_microsec_timestamp, end_time_microsec, container_count)
         malop_ids = list(malops_dict.keys())
         connector.save_progress("Fetched {number_of_malops} malops from Cybereason console", number_of_malops=len(malop_ids))
 
@@ -152,7 +152,7 @@ class CybereasonPoller:
         try:
             if not self.feature_translation:
                 url = "{0}/rest/translate/features/all".format(connector._base_url)
-                self.feature_translation = self.cr_session.get(url).json()
+                self.feature_translation = self.cr_session.get(url, timeout=DEFAULT_REQUEST_TIMEOUT).json()
             # At this point we are guaranteed to have a feature translation
             (decision_feature_type, decision_feature_key) = self._get_decision_feature_details(decision_feature)
             feature_description = self.feature_translation[decision_feature_type][decision_feature_key]["translatedName"]
@@ -194,7 +194,7 @@ class CybereasonPoller:
         iterCount = 0
         try:
             while hasMoreSensors and iterCount < 100:
-                response = self.cr_session.post(url=url, json=query, headers=connector._headers)
+                response = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
                 result = response.json()
                 sensors = sensors + result["sensors"]
                 hasMoreSensors = result["hasMoreResults"]
@@ -242,7 +242,7 @@ class CybereasonPoller:
         }
         process_details = {}
         try:
-            res = self.cr_session.post(url=url, json=query, headers=connector._headers)
+            res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             process_details = res.json()["data"]["resultIdToElementDataMap"]
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -297,7 +297,7 @@ class CybereasonPoller:
         }
         connection_details = {}
         try:
-            res = self.cr_session.post(url=url, json=query, headers=connector._headers)
+            res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             connection_details = res.json()["data"]["resultIdToElementDataMap"]
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -346,7 +346,7 @@ class CybereasonPoller:
         }
         user_details = {}
         try:
-            res = self.cr_session.post(url=url, json=query, headers=connector._headers)
+            res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             user_details = res.json()["data"]["resultIdToElementDataMap"]
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
@@ -459,52 +459,68 @@ class CybereasonPoller:
             connector.debug_print("Exception when parsing artifact results: {0}".format(err))
             return None
 
-    def _get_malops(self, connector, malop_timestamp, max_number_malops):
+    def _get_malops(self, connector, start_timestamp, end_timestamp, max_number_malops):
         malops_dict = {}
-        url = "{0}/rest/crimes/unified".format(connector._base_url)
-        query = {
-            "templateContext": "OVERVIEW",
-            "queryPath": [
-                {
-                    "requestedType": "MalopProcess",
-                    "guidList": [],
-                    "filters": [
-                        {
-                            "values": [malop_timestamp],
-                            "filterType": "GreaterThan",
-                            "facetName": "malopLastUpdateTime"
-                        }
-                    ],
-                    "result": True
+        url = f"{connector._base_url}/rest/detection/inbox"
+        query = {"startTime": start_timestamp, "endTime": end_timestamp}
+        malop_res = self.cr_session.post(url=url, json=query, headers=connector._headers)
+        malops = json.loads(malop_res.content)
+        connector.save_progress(f"Malops response: {len(malops['malops'])}")
+
+        for malop in malops["malops"]:
+            connector.debug_print(f"Malop EDR: {malop['edr']}")
+            if malop['edr']:
+                url = "{0}/rest/crimes/unified".format(connector._base_url)
+                query = {
+                    "templateContext": "OVERVIEW",
+                    "queryPath": [{
+                        "requestedType": "MalopProcess",
+                        "guidList": ["{}".format(malop['guid'])],
+                        "result": True
+                    }],
+                    "totalResultLimit": max_number_malops,
+                    "perGroupLimit": max_number_malops,
+                    "perFeatureLimit": max_number_malops
                 }
-            ],
-            "totalResultLimit": max_number_malops,
-            "perGroupLimit": max_number_malops,
-            "perFeatureLimit": max_number_malops
-        }
-        res = self.cr_session.post(url=url, json=query, headers=connector._headers)
-        malops_dict = res.json()["data"]["resultIdToElementDataMap"]
+                res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
+                malops_dict[malop['guid']] = res.json()["data"]["resultIdToElementDataMap"][malop['guid']]
+            else:
+                malops_dict[malop['guid']] = malop
+
         return malops_dict
 
     def _get_container_dict_for_malop(self, connector, config, malop_id, malop_data):
         connector.debug_print("Building container for malop {0}".format(malop_id))
         # Build the container JSON
         container_json = {}
-        container_json["name"] = malop_data["elementValues"]["primaryRootCauseElements"]["elementValues"][0]["name"]
         container_json["data"] = malop_data
-        decision_feature = malop_data["simpleValues"]["decisionFeature"]["values"][0]
-        container_json["description"] = self._get_decision_feature_translation(connector, decision_feature)
         container_json["source_data_identifier"] = malop_id
-        container_json["label"] = config.get("ingest", {}).get("container_label")
-        status_map = self._get_status_map_malop()
-        container_json["status"] = status_map.get(malop_data["simpleValues"]["managementStatus"]["values"][0], "New")
-        severity_map = self._get_severity_map_malop(connector, config)
-        (_, decision_feature_key) = self._get_decision_feature_details(decision_feature)
-        container_json["start_time"] = self._phtimestamp_from_crtimestamp(
-            malop_data["simpleValues"]["malopStartTime"]["values"][0]
-        )
-        container_json["severity"] = severity_map.get(decision_feature_key, "High")
-        container_json["artifacts"] = self._get_artifacts_for_malop(connector, malop_id, malop_data)
+        container_json["label"] = config.get("ingest", {}).get("container_label", "")
+
+        if malop_data.get("elementValues", False):
+            container_json["name"] = malop_data["elementValues"]["primaryRootCauseElements"]["elementValues"][0]["name"]
+            container_json["artifacts"] = self._get_artifacts_for_malop(connector, malop_id, malop_data)
+        else:
+            container_json["name"] = malop_data.get("displayName", "")
+            container_json["artifacts"] = malop_data.get('machines', [])
+            container_json["artifacts"] = container_json["artifacts"] + malop_data.get('users', [])
+
+        if malop_data.get("simpleValues", False):
+            decision_feature = malop_data["simpleValues"]["decisionFeature"]["values"][0]
+            container_json["description"] = self._get_decision_feature_translation(connector, decision_feature)
+            status_map = self._get_status_map_malop()
+            container_json["status"] = status_map.get(malop_data["simpleValues"]["managementStatus"]["values"][0], "New")
+            (_, decision_feature_key) = self._get_decision_feature_details(decision_feature)
+            severity_map = self._get_severity_map_malop(connector, config)
+            container_json["severity"] = severity_map.get(decision_feature_key, "High")
+            container_json["start_time"] = self._phtimestamp_from_crtimestamp(
+                malop_data["simpleValues"]["malopStartTime"]["values"][0]
+            )
+        else:
+            container_json["description"] = "None"
+            container_json["status"] = malop_data['status']
+            container_json["severity"] = malop_data['severity']
+            container_json["start_time"] = self._phtimestamp_from_crtimestamp(malop_data['creationTime'])
 
         return container_json
 
@@ -669,7 +685,7 @@ class CybereasonPoller:
         url = "{0}/rest/crimes/get-comments".format(connector._base_url)
         query = malop_id
         try:
-            res = self.cr_session.post(url=url, data=query, headers=connector._headers)
+            res = self.cr_session.post(url=url, data=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             comments = res.json()
             for comment in comments:
                 cef = {
@@ -696,7 +712,7 @@ class CybereasonPoller:
         artifacts = []
         url = "{0}/#/malop/{1}".format(connector._base_url.rstrip("/"), malop_id)
         link_artifact = {
-            "source_data_identifier": hashlib.sha1(url.encode()).hexdigest(),  # Just using the URL does not work for some reason
+            "source_data_identifier": hashlib.sha1(url.encode()).hexdigest(),  # nosemgrep # Just using the URL does not work for some reason
             "name": url,
             "description": "Link to view the Malop in the Cybereason console",
             "type": "malop_link",
@@ -800,7 +816,7 @@ class CybereasonPoller:
         }
         composite_uid = "{0} {1}".format(malware["guid"], malware["machineName"])
         affected_machine_artifact = {
-            "source_data_identifier": hashlib.sha1(composite_uid.encode()).hexdigest(),
+            "source_data_identifier": hashlib.sha1(composite_uid.encode()).hexdigest(),  # nosemgrep
             "name": malware["machineName"],
             "description": "Details of the machine affected by the Malop",
             "type": "machine",

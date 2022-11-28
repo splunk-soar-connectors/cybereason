@@ -712,7 +712,7 @@ class CybereasonPoller:
         artifacts = []
         url = "{0}/#/malop/{1}".format(connector._base_url.rstrip("/"), malop_id)
         link_artifact = {
-            "source_data_identifier": hashlib.sha1(url.encode()).hexdigest(),  # Just using the URL does not work for some reason
+            "source_data_identifier": hashlib.sha1(url.encode()).hexdigest(),  # nosemgrep # Just using the URL does not work for some reason
             "name": url,
             "description": "Link to view the Malop in the Cybereason console",
             "type": "malop_link",
@@ -816,7 +816,7 @@ class CybereasonPoller:
         }
         composite_uid = "{0} {1}".format(malware["guid"], malware["machineName"])
         affected_machine_artifact = {
-            "source_data_identifier": hashlib.sha1(composite_uid.encode()).hexdigest(),
+            "source_data_identifier": hashlib.sha1(composite_uid.encode()).hexdigest(),  # nosemgrep
             "name": malware["machineName"],
             "description": "Details of the machine affected by the Malop",
             "type": "machine",

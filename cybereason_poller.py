@@ -104,7 +104,7 @@ class CybereasonPoller:
     def _fetch_and_ingest_malops(self, connector, config, start_time_microsec_timestamp, end_time_microsec, container_count):
         # Fetch Malops
         success = True
-        malops_dict = self._get_malops(connector, start_time_microsec_timestamp, end_time_microsec, container_count)
+        malops_dict = self._get_malops(connector, config, start_time_microsec_timestamp, end_time_microsec, container_count)
         malop_ids = list(malops_dict.keys())
         connector.save_progress("Fetched {number_of_malops} malops from Cybereason console", number_of_malops=len(malop_ids))
 
@@ -459,13 +459,15 @@ class CybereasonPoller:
             connector.debug_print("Exception when parsing artifact results: {0}".format(err))
             return None
 
-    def _get_malops(self, connector, start_timestamp, end_timestamp, max_number_malops):
+    def _get_malops(self, connector, config, start_timestamp, end_timestamp, max_number_malops):
         malops_dict = {}
         url = f"{connector._base_url}/rest/detection/inbox"
         query = {"startTime": start_timestamp, "endTime": end_timestamp}
         malop_res = self.cr_session.post(url=url, json=query, headers=connector._headers)
         malops = json.loads(malop_res.content)
         connector.save_progress(f"Malops response: {len(malops['malops'])}")
+
+        enable_epp_poll = config["enable_epp_poll"]
 
         for malop in malops["malops"]:
             connector.debug_print(f"Malop EDR: {malop['edr']}")
@@ -484,7 +486,7 @@ class CybereasonPoller:
                 }
                 res = self.cr_session.post(url=url, json=query, headers=connector._headers, timeout=DEFAULT_REQUEST_TIMEOUT)
                 malops_dict[malop['guid']] = res.json()["data"]["resultIdToElementDataMap"][malop['guid']]
-            else:
+            elif enable_epp_poll:
                 malops_dict[malop['guid']] = malop
 
         return malops_dict

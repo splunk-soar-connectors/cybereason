@@ -2,7 +2,7 @@
 # Cybereason
 
 Publisher: Cybereason  
-Connector Version: 2\.3\.0  
+Connector Version: 2\.4\.0  
 Product Vendor: Cybereason  
 Product Name: Cybereason  
 Product Version Supported (regex): "\.\*"  
@@ -58,6 +58,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **malware\_historical\_days** |  required  | numeric | The number of days for which we want to get Malware \(This parameter will be used for the first\-time poll only, and will be ignored in subsequent polls\)
 **override\_malop\_severity\_map** |  optional  | string | A JSON string that the user can add to override the default severity mapping for different malop types
 **malware\_severity** |  optional  | string | The severity to apply for all malware events
+**enable\_epp\_poll** |  optional  | boolean | If checked, will poll for EPP/Detection Malops
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  

@@ -467,7 +467,7 @@ class CybereasonPoller:
         malops = json.loads(malop_res.content)
         connector.save_progress(f"Malops response: {len(malops['malops'])}")
 
-        enable_epp_poll = config["enable_epp_poll"]
+        enable_epp_poll = config.get("enable_epp_poll", False)
 
         for malop in malops["malops"]:
             connector.debug_print(f"Malop EDR: {malop['edr']}")

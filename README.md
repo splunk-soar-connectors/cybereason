@@ -2,7 +2,7 @@
 # Cybereason
 
 Publisher: Cybereason  
-Connector Version: 2\.3\.1  
+Connector Version: 2\.4\.0  
 Product Vendor: Cybereason  
 Product Name: Cybereason  
 Product Version Supported (regex): "\.\*"  

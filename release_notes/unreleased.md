@@ -1,2 +1,2 @@
 **Unreleased**
-* Added polling for EPP Malops along with EDR Malops
+* Added Check Box to let the user choose to poll for EPP/Detection Malops

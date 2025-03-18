@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Cybereason",
-    "license": "Copyright (c) Cybereason, 2018-2022",
+    "license": "Copyright (c) Cybereason, 2018-2025",
     "app_version": "2.4.0",
     "utctime_updated": "2022-01-07T20:19:08.000000Z",
     "package_name": "phantom_cybereason",

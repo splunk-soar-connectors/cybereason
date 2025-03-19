@@ -1,3 +1,16 @@
+# Copyright (c) 2025 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # File: cybereason_query_actions.py
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,12 +38,12 @@ class CybereasonQueryActions:
         return None
 
     def _handle_query_processes(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        malop_id = connector._get_string_param(param.get('malop_id'))
+        malop_id = connector._get_string_param(param.get("malop_id"))
         try:
             cr_session = CybereasonSession(connector).get_session()
             query = {
@@ -39,28 +52,18 @@ class CybereasonQueryActions:
                         "requestedType": "MalopProcess",
                         "filters": [],
                         "guidList": [malop_id],
-                        "connectionFeature": {
-                            "elementInstanceType": "MalopProcess",
-                            "featureName": "suspects"
-                        }
+                        "connectionFeature": {"elementInstanceType": "MalopProcess", "featureName": "suspects"},
                     },
-                    {
-                        "requestedType": "Process",
-                        "filters": [],
-                        "isResult": True
-                    }
+                    {"requestedType": "Process", "filters": [], "isResult": True},
                 ],
                 "totalResultLimit": 1000,
                 "perGroupLimit": 100,
                 "perFeatureLimit": 100,
                 "templateContext": "SPECIFIC",
                 "queryTimeout": 120000,
-                "customFields": [
-                    "ownerMachine",
-                    "elementDisplayName"
-                ]
+                "customFields": ["ownerMachine", "elementDisplayName"],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -70,32 +73,29 @@ class CybereasonQueryActions:
 
             processes_dict = res.json()["data"]["resultIdToElementDataMap"]
             for process_id, process_data in processes_dict.items():
-                data = {
-                    "process_id": process_id,
-                    "process_name": process_data["simpleValues"]["elementDisplayName"]["values"][0]
-                }
+                data = {"process_id": process_id, "process_name": process_data["simpleValues"]["elementDisplayName"]["values"][0]}
                 self._add_element_value_if_exists(data, "owner_machine_id", process_data, "ownerMachine", "guid")
                 self._add_element_value_if_exists(data, "owner_machine_name", process_data, "ownerMachine", "name")
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_processes'] = len(processes_dict)
+            summary["total_processes"] = len(processes_dict)
 
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_query_machine(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        name = connector._get_string_param(param.get('name'))
+        name = connector._get_string_param(param.get("name"))
         try:
             ret_val = self._query_machine_details(connector, action_result, name)
             if phantom.is_fail(ret_val):
@@ -105,17 +105,17 @@ class CybereasonQueryActions:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS, status_message="Query machine action successfully completed")
 
     def _handle_query_machine_ip(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        machine_ip = connector._get_string_param(param['machine_ip'])
+        machine_ip = connector._get_string_param(param["machine_ip"])
 
         ret_val, machine_names = connector._get_machine_name_by_machine_ip(machine_ip, action_result)
         if phantom.is_fail(ret_val):
@@ -130,17 +130,17 @@ class CybereasonQueryActions:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_query_users(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        user = connector._get_string_param(param.get('user'))
+        user = connector._get_string_param(param.get("user"))
         malops_dict = {}
         try:
             cr_session = CybereasonSession(connector).get_session()
@@ -149,14 +149,8 @@ class CybereasonQueryActions:
                 "queryPath": [
                     {
                         "requestedType": "User",
-                        "filters": [
-                            {
-                                "facetName": "elementDisplayName",
-                                "values": [user],
-                                "filterType": "MatchesWildcard"
-                            }
-                        ],
-                        "isResult": True
+                        "filters": [{"facetName": "elementDisplayName", "values": [user], "filterType": "MatchesWildcard"}],
+                        "isResult": True,
                     }
                 ],
                 "totalResultLimit": 1000,
@@ -164,16 +158,9 @@ class CybereasonQueryActions:
                 "perFeatureLimit": 100,
                 "templateContext": "SPECIFIC",
                 "queryTimeout": 120000,
-                "customFields": [
-                    "domain",
-                    "ownerMachine",
-                    "ownerOrganization.name",
-                    "isLocalSystem",
-                    "emailAddress",
-                    "elementDisplayName"
-                ]
+                "customFields": ["domain", "ownerMachine", "ownerOrganization.name", "isLocalSystem", "emailAddress", "elementDisplayName"],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -184,9 +171,7 @@ class CybereasonQueryActions:
             malops_dict = res.json()["data"]["resultIdToElementDataMap"]
 
             for _, user_data in malops_dict.items():
-                data = {
-                    "element_name": user_data["simpleValues"]["elementDisplayName"]["values"][0]
-                }
+                data = {"element_name": user_data["simpleValues"]["elementDisplayName"]["values"][0]}
                 self._add_simple_value_if_exists(data, "domain", user_data, "domain")
                 self._add_simple_value_if_exists(data, "organization", user_data, "ownerOrganization.name")
                 self._add_simple_value_if_exists(data, "local_system", user_data, "isLocalSystem")
@@ -194,22 +179,22 @@ class CybereasonQueryActions:
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_results'] = len(malops_dict)
+            summary["total_results"] = len(malops_dict)
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_query_files(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        file_name = connector._get_string_param(param.get('file_name'))
+        file_name = connector._get_string_param(param.get("file_name"))
         malops_dict = {}
         try:
             cr_session = CybereasonSession(connector).get_session()
@@ -218,14 +203,8 @@ class CybereasonQueryActions:
                 "queryPath": [
                     {
                         "requestedType": "File",
-                        "filters": [
-                            {
-                                "facetName": "elementDisplayName",
-                                "values": [file_name],
-                                "filterType": "ContainsIgnoreCase"
-                            }
-                        ],
-                        "isResult": True
+                        "filters": [{"facetName": "elementDisplayName", "values": [file_name], "filterType": "ContainsIgnoreCase"}],
+                        "isResult": True,
                     }
                 ],
                 "totalResultLimit": 1000,
@@ -248,10 +227,10 @@ class CybereasonQueryActions:
                     "productVersion",
                     "companyName",
                     "internalName",
-                    "elementDisplayName"
-                ]
+                    "elementDisplayName",
+                ],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -265,7 +244,7 @@ class CybereasonQueryActions:
                 connector.save_progress(str(file_id))
                 data = {
                     "element_name": file_data["simpleValues"]["elementDisplayName"]["values"][0],
-                    "suspicion_count": file_data.get("suspicionCount")
+                    "suspicion_count": file_data.get("suspicionCount"),
                 }
                 self._add_simple_value_if_exists(data, "signed", file_data, "isSigned")
                 self._add_simple_value_if_exists(data, "SHA1_signature", file_data, "sha1String")
@@ -276,22 +255,22 @@ class CybereasonQueryActions:
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_results'] = len(malops_dict)
+            summary["total_results"] = len(malops_dict)
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_query_domain(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        domain_name = connector._get_string_param(param.get('domain_name'))
+        domain_name = connector._get_string_param(param.get("domain_name"))
         malops_dict = {}
         try:
             cr_session = CybereasonSession(connector).get_session()
@@ -300,14 +279,8 @@ class CybereasonQueryActions:
                 "queryPath": [
                     {
                         "requestedType": "DomainName",
-                        "filters": [
-                            {
-                                "facetName": "elementDisplayName",
-                                "values": [domain_name],
-                                "filterType": "MatchesWildcard"
-                            }
-                        ],
-                        "isResult": True
+                        "filters": [{"facetName": "elementDisplayName", "values": [domain_name], "filterType": "MatchesWildcard"}],
+                        "isResult": True,
                     }
                 ],
                 "totalResultLimit": 1000,
@@ -320,10 +293,10 @@ class CybereasonQueryActions:
                     "isInternalDomain",
                     "everResolvedDomain",
                     "everResolvedSecondLevelDomain",
-                    "elementDisplayName"
-                ]
+                    "elementDisplayName",
+                ],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -334,36 +307,30 @@ class CybereasonQueryActions:
             malops_dict = res.json()["data"]["resultIdToElementDataMap"]
 
             for _, domain_data in malops_dict.items():
-                data = {
-                    "element_name": domain_data["simpleValues"]["elementDisplayName"]["values"][0]
-                }
-                self._add_simple_value_if_exists(
-                    data, "malicious_classification_type", domain_data, "maliciousClassificationType"
-                )
+                data = {"element_name": domain_data["simpleValues"]["elementDisplayName"]["values"][0]}
+                self._add_simple_value_if_exists(data, "malicious_classification_type", domain_data, "maliciousClassificationType")
                 self._add_simple_value_if_exists(data, "is_internal_domain", domain_data, "isInternalDomain")
                 self._add_simple_value_if_exists(data, "was_ever_resolved", domain_data, "everResolvedDomain")
-                self._add_simple_value_if_exists(
-                    data, "was_ever_resolved_as_second_level_domain", domain_data, "everResolvedSecondLevelDomain"
-                )
+                self._add_simple_value_if_exists(data, "was_ever_resolved_as_second_level_domain", domain_data, "everResolvedSecondLevelDomain")
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_results'] = len(malops_dict)
+            summary["total_results"] = len(malops_dict)
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_query_connections(self, connector, param):
-        connector.save_progress("In action handler for: {0}".format(connector.get_action_identifier()))
+        connector.save_progress(f"In action handler for: {connector.get_action_identifier()}")
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = connector.add_action_result(ActionResult(dict(param)))
 
-        connection_name = connector._get_string_param(param.get('connection_name'))
+        connection_name = connector._get_string_param(param.get("connection_name"))
         malops_dict = {}
         try:
             cr_session = CybereasonSession(connector).get_session()
@@ -372,14 +339,8 @@ class CybereasonQueryActions:
                 "queryPath": [
                     {
                         "requestedType": "Connection",
-                        "filters": [
-                            {
-                                "facetName": "elementDisplayName",
-                                "values": [connection_name],
-                                "filterType": "MatchesWildcard"
-                            }
-                        ],
-                        "isResult": True
+                        "filters": [{"facetName": "elementDisplayName", "values": [connection_name], "filterType": "MatchesWildcard"}],
+                        "isResult": True,
                     }
                 ],
                 "totalResultLimit": 1000,
@@ -401,10 +362,10 @@ class CybereasonQueryActions:
                     "dnsQuery",
                     "calculatedCreationTime",
                     "endTime",
-                    "elementDisplayName"
-                ]
+                    "elementDisplayName",
+                ],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -416,11 +377,9 @@ class CybereasonQueryActions:
             for _, connection_data in malops_dict.items():
                 # Name contains characters like ">" which will be escaped to "&gt;" when showing in the output table
                 name = connection_data["simpleValues"]["elementDisplayName"]["values"][0]
-                name = name.replace('>', ' [to] ')
-                name = name.replace('<', ' [from] ')
-                data = {
-                    "element_name": name
-                }
+                name = name.replace(">", " [to] ")
+                name = name.replace("<", " [from] ")
+                data = {"element_name": name}
                 self._add_simple_value_if_exists(data, "direction", connection_data, "direction")
                 self._add_simple_value_if_exists(data, "server_address", connection_data, "serverAddress")
                 self._add_simple_value_if_exists(data, "server_port", connection_data, "serverPort")
@@ -435,12 +394,12 @@ class CybereasonQueryActions:
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_results'] = len(malops_dict)
+            summary["total_results"] = len(malops_dict)
         except Exception as e:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -461,14 +420,8 @@ class CybereasonQueryActions:
                 "queryPath": [
                     {
                         "requestedType": "Machine",
-                        "filters": [
-                            {
-                                "facetName": "elementDisplayName",
-                                "values": [machine_name],
-                                "filterType": "MatchesWildcard"
-                            }
-                        ],
-                        "isResult": True
+                        "filters": [{"facetName": "elementDisplayName", "values": [machine_name], "filterType": "MatchesWildcard"}],
+                        "isResult": True,
                     }
                 ],
                 "totalResultLimit": 1000,
@@ -487,10 +440,10 @@ class CybereasonQueryActions:
                     "mountPoints",
                     "processes",
                     "services",
-                    "elementDisplayName"
-                ]
+                    "elementDisplayName",
+                ],
             }
-            url = "{0}/rest/visualsearch/query/simple".format(connector._base_url)
+            url = f"{connector._base_url}/rest/visualsearch/query/simple"
 
             res = cr_session.post(url, json=query, headers=connector._headers)
 
@@ -500,17 +453,14 @@ class CybereasonQueryActions:
 
             malops_dict = res.json()["data"]["resultIdToElementDataMap"]
             for machine_id, machine_data in malops_dict.items():
-                data = {
-                    "machine_id": machine_id,
-                    "machine_name": machine_data["simpleValues"]["elementDisplayName"]["values"][0]
-                }
+                data = {"machine_id": machine_id, "machine_name": machine_data["simpleValues"]["elementDisplayName"]["values"][0]}
                 self._add_simple_value_if_exists(data, "os_version", machine_data, "osVersionType")
                 self._add_simple_value_if_exists(data, "platform_architecture", machine_data, "platformArchitecture")
                 self._add_simple_value_if_exists(data, "is_connected_to_cybereason", machine_data, "isActiveProbeConnected")
                 action_result.add_data(data)
 
             summary = action_result.update_summary({})
-            summary['total_machines'] = len(malops_dict)
+            summary["total_machines"] = len(malops_dict)
 
             return phantom.APP_SUCCESS
 
@@ -518,4 +468,4 @@ class CybereasonQueryActions:
             err = connector._get_error_message_from_exception(e)
             connector.debug_print(err)
             connector.debug_print(traceback.format_exc())
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred. {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred. {err}")

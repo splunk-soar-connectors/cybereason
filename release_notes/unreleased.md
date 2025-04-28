@@ -1,2 +1,1 @@
 **Unreleased**
-* Dependency updates

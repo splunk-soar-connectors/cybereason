@@ -1,7 +1,7 @@
 # Cybereason
 
 Publisher: Cybereason \
-Connector Version: 2.4.1 \
+Connector Version: 2.4.2 \
 Product Vendor: Cybereason \
 Product Name: Cybereason \
 Minimum Product Version: 5.3.5

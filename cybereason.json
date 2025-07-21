@@ -7,7 +7,7 @@
     "logo": "logo_cybereason.svg",
     "logo_dark": "logo_cybereason_dark.svg",
     "product_name": "Cybereason",
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "product_version_regex": ".*",
     "publisher": "Cybereason",
     "license": "Copyright (c) Cybereason, 2018-2025",

@@ -29,7 +29,7 @@
         "verify_server_cert": {
             "description": "If checked, will verify the SSL certificate of the Cybereason server",
             "data_type": "boolean",
-            "default": false,
+            "default": true,
             "order": 1
         },
         "username": {

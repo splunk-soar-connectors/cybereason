@@ -979,7 +979,7 @@ class CybereasonConnector(BaseConnector):
         self._base_url = config.get("base_url", "").rstrip("/")  # Remove trailing '/' characters (if any) from URL
         self._username = config.get("username")
         self._password = config.get("password")
-        self._verify_server_cert = config.get("verify_server_cert", False)
+        self._verify_server_cert = config.get("verify_server_cert", True)
         self._headers = {"Content-Type": "application/json"}
         self._headers.update({"User-Agent": "CybereasonPhantom/2.1.0 (target=unknown)"})
         return phantom.APP_SUCCESS

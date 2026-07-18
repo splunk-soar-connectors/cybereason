@@ -28,6 +28,7 @@
 
 import json
 import traceback
+from urllib.parse import quote, unquote
 
 import phantom.app as phantom
 import requests
@@ -40,12 +41,6 @@ from cybereason_consts import *
 from cybereason_poller import CybereasonPoller
 from cybereason_query_actions import CybereasonQueryActions
 from cybereason_session import CybereasonSession
-
-
-try:
-    from urllib import unquote
-except:
-    from urllib.parse import unquote
 
 
 class RetVal(tuple):
@@ -537,7 +532,8 @@ class CybereasonConnector(BaseConnector):
 
         try:
             cr_session = CybereasonSession(self).get_session()
-            url = f"{self._base_url}/rest/remediate/progress/{remediation_user}/{malop_id}/{remediation_id}"
+            encoded_path = "/".join(quote(value, safe="") for value in (remediation_user, malop_id, remediation_id))
+            url = f"{self._base_url}/rest/remediate/progress/{encoded_path}"
             res = cr_session.get(url)
 
             if res.status_code < 200 or res.status_code >= 399:

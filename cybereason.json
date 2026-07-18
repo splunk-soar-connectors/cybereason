@@ -10,7 +10,7 @@
     "python_version": "3.9, 3.13",
     "product_version_regex": ".*",
     "publisher": "Cybereason",
-    "license": "Copyright (c) Cybereason, 2018-2025",
+    "license": "Copyright (c) Cybereason, 2018-2026",
     "app_version": "2.4.2",
     "utctime_updated": "2025-04-28T17:13:36.050365Z",
     "package_name": "phantom_cybereason",
@@ -2019,5 +2019,11 @@
             },
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": []
+    },
+    "pip313_dependencies": {
+        "wheel": []
+    }
 }

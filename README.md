@@ -1,9 +1,9 @@
 # Cybereason
 
-Publisher: Cybereason \
-Connector Version: 2.4.2 \
-Product Vendor: Cybereason \
-Product Name: Cybereason \
+Publisher: Cybereason <br>
+Connector Version: 2.4.2 <br>
+Product Vendor: Cybereason <br>
+Product Name: Cybereason <br>
 Minimum Product Version: 5.3.5
 
 This app integrates with the Cybereason platform to perform investigative, contain, and corrective actions on Malop and Malware events
@@ -26,34 +26,34 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality \
-[delete registry key](#action-delete-registry-key) - Deletes the specified registry key for a given malop ID and machine name \
-[get sensor status](#action-get-sensor-status) - Get the connectivity status for all machine sensors in a Malop \
-[add malop comment](#action-add-malop-comment) - Add a comment to the provided Malop ID \
-[update malop status](#action-update-malop-status) - Update status for the provided Malop ID such as Under Investigation, To review, etc \
-[isolate machine](#action-isolate-machine) - Blocks all communication to and from the machine. Communication with the Cybereason platform is not affected \
-[unisolate machine](#action-unisolate-machine) - Unblocks all communication to and from the machine \
-[isolate specific machine](#action-isolate-specific-machine) - Blocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected \
-[unisolate specific machine](#action-unisolate-specific-machine) - Unblocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected \
-[kill process](#action-kill-process) - Kills the active process on the machine \
-[get remediation status](#action-get-remediation-status) - Gets the remediation status for a previously executed remediation action like Kill Process \
-[set reputation](#action-set-reputation) - Blacklists / Whitelists / Removes a file hash reputation so that future malop detections can quickly identify the hash \
-[query processes](#action-query-processes) - Queries a given malop to retrieve all processes \
-[query machine](#action-query-machine) - Queries a given machine name to retrieve all that machine's information \
-[query machine ip](#action-query-machine-ip) - Queries a given machine IP to retrieve all that machine's information \
-[query users](#action-query-users) - Queries a given user to retrieve all user-related details \
-[query files](#action-query-files) - Queries a given filename to retrieve all file details \
-[query domain](#action-query-domain) - Queries a given domain name to retrieve all details of that domain \
-[query connections](#action-query-connections) - Queries a given name to retrieve all details of that connection \
-[upgrade sensor](#action-upgrade-sensor) - Upgrade a sensor \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality <br>
+[delete registry key](#action-delete-registry-key) - Deletes the specified registry key for a given malop ID and machine name <br>
+[get sensor status](#action-get-sensor-status) - Get the connectivity status for all machine sensors in a Malop <br>
+[add malop comment](#action-add-malop-comment) - Add a comment to the provided Malop ID <br>
+[update malop status](#action-update-malop-status) - Update status for the provided Malop ID such as Under Investigation, To review, etc <br>
+[isolate machine](#action-isolate-machine) - Blocks all communication to and from the machine. Communication with the Cybereason platform is not affected <br>
+[unisolate machine](#action-unisolate-machine) - Unblocks all communication to and from the machine <br>
+[isolate specific machine](#action-isolate-specific-machine) - Blocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected <br>
+[unisolate specific machine](#action-unisolate-specific-machine) - Unblocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected <br>
+[kill process](#action-kill-process) - Kills the active process on the machine <br>
+[get remediation status](#action-get-remediation-status) - Gets the remediation status for a previously executed remediation action like Kill Process <br>
+[set reputation](#action-set-reputation) - Blacklists / Whitelists / Removes a file hash reputation so that future malop detections can quickly identify the hash <br>
+[query processes](#action-query-processes) - Queries a given malop to retrieve all processes <br>
+[query machine](#action-query-machine) - Queries a given machine name to retrieve all that machine's information <br>
+[query machine ip](#action-query-machine-ip) - Queries a given machine IP to retrieve all that machine's information <br>
+[query users](#action-query-users) - Queries a given user to retrieve all user-related details <br>
+[query files](#action-query-files) - Queries a given filename to retrieve all file details <br>
+[query domain](#action-query-domain) - Queries a given domain name to retrieve all details of that domain <br>
+[query connections](#action-query-connections) - Queries a given name to retrieve all details of that connection <br>
+[upgrade sensor](#action-upgrade-sensor) - Upgrade a sensor <br>
 [restart sensor](#action-restart-sensor) - Restart a sensor
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 Test the connectivity with the Cybereason server configured by the user.
@@ -70,7 +70,7 @@ No Output
 
 Callback action for the on_poll ingest functionality
 
-Type: **ingest** \
+Type: **ingest** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -91,7 +91,7 @@ No Output
 
 Deletes the specified registry key for a given malop ID and machine name
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 A malop can contain processes that write to Windows registry keys. This action will fire a remediation action on the Cybereason console that will delete the registry key using the Cybereason sensor installed on the machine.
@@ -121,7 +121,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get the connectivity status for all machine sensors in a Malop
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Each machine covered by Cybereason will have a sensor installed on it. This action will extract the sensor status for all machines in a Malop.
@@ -150,7 +150,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add a comment to the provided Malop ID
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -177,7 +177,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update status for the provided Malop ID such as Under Investigation, To review, etc
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -204,7 +204,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Blocks all communication to and from the machine. Communication with the Cybereason platform is not affected
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -229,7 +229,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Unblocks all communication to and from the machine
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -254,7 +254,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Blocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -279,7 +279,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Unblocks all communication to and from the machine identified by the given Name or IP. Communication with the Cybereason platform is not affected
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -304,7 +304,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Kills the active process on the machine
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -336,7 +336,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Gets the remediation status for a previously executed remediation action like Kill Process
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -366,7 +366,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Blacklists / Whitelists / Removes a file hash reputation so that future malop detections can quickly identify the hash
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -393,7 +393,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given malop to retrieve all processes
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -421,7 +421,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given machine name to retrieve all that machine's information
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -450,7 +450,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given machine IP to retrieve all that machine's information
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -479,7 +479,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given user to retrieve all user-related details
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -508,7 +508,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given filename to retrieve all file details
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -540,7 +540,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given domain name to retrieve all details of that domain
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -569,7 +569,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Queries a given name to retrieve all details of that connection
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -604,7 +604,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Upgrade a sensor
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Upgrade a sensor using the Cybereason sensor pylum ID provided as an input.
@@ -631,7 +631,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Restart a sensor
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Restart a sensor using the Cybereason sensor pylum ID provided as an input.
@@ -658,7 +658,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

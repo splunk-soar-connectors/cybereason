@@ -7,10 +7,10 @@
     "logo": "logo_cybereason.svg",
     "logo_dark": "logo_cybereason_dark.svg",
     "product_name": "Cybereason",
-    "python_version": "3",
+    "python_version": "3.9, 3.13",
     "product_version_regex": ".*",
     "publisher": "Cybereason",
-    "license": "Copyright (c) Cybereason, 2018-2025",
+    "license": "Copyright (c) Cybereason, 2018-2026",
     "app_version": "2.4.2",
     "utctime_updated": "2025-04-28T17:13:36.050365Z",
     "package_name": "phantom_cybereason",
@@ -29,7 +29,7 @@
         "verify_server_cert": {
             "description": "If checked, will verify the SSL certificate of the Cybereason server",
             "data_type": "boolean",
-            "default": false,
+            "default": true,
             "order": 1
         },
         "username": {
@@ -2019,5 +2019,11 @@
             },
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": []
+    },
+    "pip313_dependencies": {
+        "wheel": []
+    }
 }

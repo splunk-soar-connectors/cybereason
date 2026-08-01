@@ -27,6 +27,8 @@
 # Python 3 Compatibility imports
 
 import json
+import posixpath
+import re
 import traceback
 from urllib.parse import quote, unquote
 
@@ -49,6 +51,9 @@ class RetVal(tuple):
 
 
 class CybereasonConnector(BaseConnector):
+    TLS_CONFIG_VERSION = 2
+    REMEDIATION_PATH_SEGMENT_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9._@+-]*")
+
     def __init__(self):
         # Call the BaseConnectors init first
         super().__init__()
@@ -62,6 +67,15 @@ class CybereasonConnector(BaseConnector):
 
     def _get_string_param(self, param):
         return param
+
+    @classmethod
+    def _validate_remediation_path_segment(cls, action_result, name, value):
+        if not isinstance(value, str) or value in {".", ".."} or not cls.REMEDIATION_PATH_SEGMENT_PATTERN.fullmatch(value):
+            return action_result.set_status(
+                phantom.APP_ERROR,
+                f"{name} must start with an alphanumeric character and contain only letters, digits, '.', '_', '@', '+', or '-'",
+            )
+        return phantom.APP_SUCCESS
 
     def _process_html_response(self, response, action_result):
         # An html response, treat it like an error
@@ -530,10 +544,22 @@ class CybereasonConnector(BaseConnector):
         remediation_user = param["remediation_user"]
         remediation_id = param["remediation_id"]
 
+        path_values = (
+            ("remediation_user", remediation_user),
+            ("malop_id", malop_id),
+            ("remediation_id", remediation_id),
+        )
+        for name, value in path_values:
+            if phantom.is_fail(self._validate_remediation_path_segment(action_result, name, value)):
+                return action_result.get_status()
+
         try:
             cr_session = CybereasonSession(self).get_session()
             encoded_path = "/".join(quote(value, safe="") for value in (remediation_user, malop_id, remediation_id))
-            url = f"{self._base_url}/rest/remediate/progress/{encoded_path}"
+            endpoint_path = f"/rest/remediate/progress/{encoded_path}"
+            if posixpath.normpath(endpoint_path) != endpoint_path or not endpoint_path.startswith("/rest/remediate/progress/"):
+                return action_result.set_status(phantom.APP_ERROR, "Invalid remediation status path")
+            url = f"{self._base_url}{endpoint_path}"
             res = cr_session.get(url)
 
             if res.status_code < 200 or res.status_code >= 399:
@@ -975,7 +1001,19 @@ class CybereasonConnector(BaseConnector):
         self._base_url = config.get("base_url", "").rstrip("/")  # Remove trailing '/' characters (if any) from URL
         self._username = config.get("username")
         self._password = config.get("password")
-        self._verify_server_cert = config.get("verify_server_cert", True)
+        requested_verify = config.get("verify_server_cert")
+        allow_insecure_tls = config.get("allow_insecure_tls", False) is True
+        previous_tls_config_version = self._state.get("tls_config_version", 1)
+        self._verify_server_cert = requested_verify is not False or not allow_insecure_tls
+        if previous_tls_config_version < self.TLS_CONFIG_VERSION and requested_verify is False and not allow_insecure_tls:
+            self.save_progress(
+                "Certificate verification was enabled because the previous false setting was not reconfirmed with Allow insecure TLS"
+            )
+        elif requested_verify is False and not allow_insecure_tls:
+            self.save_progress("Certificate verification remains enabled until Allow insecure TLS explicitly confirms the opt-out")
+        elif not self._verify_server_cert:
+            self.save_progress("Warning: TLS certificate verification was explicitly disabled for this asset")
+        self._state["tls_config_version"] = self.TLS_CONFIG_VERSION
         self._headers = {"Content-Type": "application/json"}
         self._headers.update({"User-Agent": "CybereasonPhantom/2.1.0 (target=unknown)"})
         return phantom.APP_SUCCESS

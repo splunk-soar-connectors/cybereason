@@ -15,7 +15,8 @@ This table lists the configuration variables required to operate Cybereason. The
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
 **base_url** | required | string | The URL of the Cybereason server to connect to. This should be of the form 'https://<server name or ip>:<port>' |
-**verify_server_cert** | optional | boolean | If checked, will verify the SSL certificate of the Cybereason server |
+**verify_server_cert** | optional | boolean | Verify the TLS certificate of the Cybereason server. Existing false values are migrated to verification unless insecure TLS is explicitly reconfirmed. |
+**allow_insecure_tls** | optional | boolean | Explicitly allow TLS certificate verification to be disabled when Verify server certificate is unchecked. Enable only after accepting the connection risk. |
 **username** | required | string | A valid username for connecting to the Cybereason server |
 **password** | required | password | A valid password for connecting to the Cybereason server |
 **malop_historical_days** | required | numeric | The number of days for which we want to get Malops (This parameter will be used for the first-time poll only, and will be ignored in subsequent polls) |

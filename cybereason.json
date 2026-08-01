@@ -27,53 +27,59 @@
             "order": 0
         },
         "verify_server_cert": {
-            "description": "If checked, will verify the SSL certificate of the Cybereason server",
+            "description": "Verify the TLS certificate of the Cybereason server. Existing false values are migrated to verification unless insecure TLS is explicitly reconfirmed.",
             "data_type": "boolean",
             "default": true,
             "order": 1
+        },
+        "allow_insecure_tls": {
+            "description": "Explicitly allow TLS certificate verification to be disabled when Verify server certificate is unchecked. Enable only after accepting the connection risk.",
+            "data_type": "boolean",
+            "default": false,
+            "order": 2
         },
         "username": {
             "description": "A valid username for connecting to the Cybereason server",
             "data_type": "string",
             "required": true,
-            "order": 2
+            "order": 3
         },
         "password": {
             "description": "A valid password for connecting to the Cybereason server",
             "data_type": "password",
             "required": true,
-            "order": 3
+            "order": 4
         },
         "malop_historical_days": {
             "description": "The number of days for which we want to get Malops (This parameter will be used for the first-time poll only, and will be ignored in subsequent polls)",
             "data_type": "numeric",
             "required": true,
             "default": 30,
-            "order": 4
+            "order": 5
         },
         "malware_historical_days": {
             "description": "The number of days for which we want to get Malware (This parameter will be used for the first-time poll only, and will be ignored in subsequent polls)",
             "data_type": "numeric",
             "required": true,
             "default": 60,
-            "order": 5
+            "order": 6
         },
         "override_malop_severity_map": {
             "description": "A JSON string that the user can add to override the default severity mapping for different malop types",
             "data_type": "string",
-            "order": 6
+            "order": 7
         },
         "malware_severity": {
             "description": "The severity to apply for all malware events",
             "data_type": "string",
             "default": "High",
-            "order": 7
+            "order": 8
         },
         "enable_epp_poll": {
             "description": "If checked, will poll for EPP/Detection Malops",
             "data_type": "boolean",
             "default": false,
-            "order": 8
+            "order": 9
         }
     },
     "actions": [

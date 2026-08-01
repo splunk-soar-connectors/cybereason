@@ -530,9 +530,13 @@ class CybereasonConnector(BaseConnector):
         remediation_user = param["remediation_user"]
         remediation_id = param["remediation_id"]
 
+        path_values = tuple(str(value) for value in (remediation_user, malop_id, remediation_id))
+        if any(value in {".", ".."} for value in path_values):
+            return action_result.set_status(phantom.APP_ERROR, "Remediation path identifiers cannot be dot segments")
+
         try:
             cr_session = CybereasonSession(self).get_session()
-            encoded_path = "/".join(quote(value, safe="") for value in (remediation_user, malop_id, remediation_id))
+            encoded_path = "/".join(quote(value, safe="") for value in path_values)
             url = f"{self._base_url}/rest/remediate/progress/{encoded_path}"
             res = cr_session.get(url)
 
